@@ -129,7 +129,7 @@ cnn.fit_generator(imagen_entrenamiento,
 
 dir='./modelo/'
 
-if not os.path.existis(dir):
+if not os.path.exists(dir):
 	os.mkdir(dir)
 
 cnn.save('./modelo/modelo.h5')

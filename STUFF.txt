@@ -1,0 +1,21 @@
+Python 3.6.7 --> Probado con esta versión el 10/10/2019. No anda con la última versión de Python al día de la fecha. 
+
+La cosa es así:
+
+El código de AMP Tech funciona con las siguientes versiones de TensorFlow:
+-TensorFlow-gpu==1.14 (probada al 10/10/2019, en GPUs NVIDIA)
+-TensorFlow==1.14 (probada al 10/10/2019, en CPUs Intel)
+
+En caso de querer utilizar TensorFlow con una GPU, se necesita seguir esta guía de instrucciones: https://www.tensorflow.org/install/gpu#pip_package
+Básicamente es una guía que te prepara para utilizar GPUs de Nvidia (en las cuales se pueden aprovechar los CUDA cores, una tecnología propia de Nvidia, para mejorar el rendimiento).
+
+En caso de querer utilizar solamente el CPU, no hace falta más que instalar TensorFlow y aquellos paquetes (packages) de Python que son necesarios para la correcta ejecución del código que poseemos.
+
+Paquetes necesarios
+
+-TensorFlow (GPU==1.14, CPU==1.14)
+-NumPy
+-Pillow
+-SciPy
+-Keras
+
