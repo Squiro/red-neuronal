@@ -24,15 +24,15 @@ data_validacion = './data/validacion'
 # Parametros de la red neuronal
 
 # Numero de veces que vamos a iterar sobre el set de datos durante el entrenamiento
-epocas = 20
+epocas = 10
 # Tamaño con el cual vamos a procesar estas imágenes (para el resize de las imagenes)
 altura, longitud = 100, 100
 # Numero de imágenes que vamos a enviar para procesar en cada uno de los pasos
 batch_size = 32
 # Número de veces que se va a procesar la información en cada una de las epocas
-pasos = 832
+pasos = 26
 # Al final de cada una de las epocas, se corren 200 pasos con el set de validación
-pasos_validacion = 416
+pasos_validacion = 12
 
 # Número de filtros que vamos a aplicar en cada convolución. 
 # Después de cada convolución nuestra imagen quedará con más profundidad.

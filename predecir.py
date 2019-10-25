@@ -1,6 +1,7 @@
 import sys
 import os
 import numpy as np
+import keras.backend as kerasBackend
 from keras.preprocessing.image import load_img, img_to_array
 #from keras.models import load_model
 import tensorflow as tf 
@@ -11,20 +12,25 @@ pesos_modelo = './modelo/pesos.h5'
 cnn = tf.keras.models.load_model(modelo)#= load_model(modelo)
 cnn.load_weights(pesos_modelo)
 
-def predict(imagepath):
+def predecir(imagepath):
     # Cargamos la imagen
     image = load_img(imagepath, target_size=(longitud, altura))
     # Convertimos la imagen en un arreglo de valores que la representa 
     image = img_to_array(image)
+    # Necesitamos normalizar la imagen, de la misma forma que la normalizamos con ImageDataGenerator en el script de entrenamiento
+    image = image.astype('float32')
+    # Dividimos la imagen por 255, por la razon de arriba ^
+    image /= 255
+
     # Añadimos una dimensión extra a la imagen
     image = np.expand_dims(image, axis=0)
     # Hacemos la prediccion sobre la imagen, esto nos devuelve un array
     # de dos dimensiones. El valor que la CNN cree que es correcto estará en la primera
     # dimensión. e.g. [[1,0,0]]
     array = cnn.predict(image)
-    #print(array)
     # Tomamos la dimensión la primera dimensión. e.g. [1,0,0]
     result = array[0]
+    print("Probabilidades en base a las clases: " + str(result))
     # Toma el valor más alto del array y nos devuelve la posición en donde se encuentra
     # el mismo (el índice)
     answer = np.argmax(result)
@@ -60,14 +66,13 @@ def predecirClases(classIndex, className, path):
     cantAciertos=0
     for image in os.listdir(path):
         print("Imagen: " + image)
-        if (predict(path+image) == classIndex):
+        if (predecir(path+image) == classIndex):
             print("Predicción: es " + className)
             cantAciertos+=1
         else:
             print("No lo predije correctamente :(")
         cantImg+=1
+        print("\n\n")
     print("Cantidad: " + str(cantImg) + "     Aciertos: " + str(cantAciertos) + "    Ratio: " + str((cantAciertos/cantImg)))
 
-
 main()
-
