@@ -1,0 +1,18 @@
+Playlist de Carla
+https://www.youtube.com/playlist?list=PLzhn0MMOd6WyZLvqF-Efs07rdRZDK7pcV
+
+Serie de videos de la teoría de Redes neuronales por Javier Garcia 
+https://www.youtube.com/watch?v=jaEIv_E29sk&t=24s 
+https://www.youtube.com/watch?v=rmz1pzfDZUo 
+https://www.youtube.com/watch?v=7igBj20dmlw&t=2s 
+https://www.youtube.com/watch?v=XVmbDxZ-HLI
+https://www.youtube.com/watch?v=nHaAhj3MZHU
+https://www.youtube.com/watch?v=NqwTFtOQMoM
+https://www.youtube.com/watch?v=toAPgzWDZJE  
+
+Link a un video que cuenta como usar CNN para hacer transferencia de aprendizaje (usar una red pre- entrenada)
+https://idreporter.net/v/video-09_gmAeHIW0.html 
+
+Backpropagation
+
+https://skymind.ai/wiki/backpropagation
