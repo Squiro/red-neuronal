@@ -6,6 +6,7 @@ from keras.preprocessing.image import load_img, img_to_array
 #from keras.models import load_model
 import tensorflow as tf 
 
+archivo = open("prediccion.txt", "a+")
 longitud, altura = 100, 100
 modelo = './modelo/modelo.h5'
 pesos_modelo = './modelo/pesos.h5'
@@ -30,7 +31,8 @@ def predecir(imagepath):
     array = cnn.predict(image)
     # Tomamos la dimensión la primera dimensión. e.g. [1,0,0]
     result = array[0]
-    print("Probabilidades en base a las clases: " + str(result))
+    #print("Probabilidades en base a las clases: " + str(result))
+    archivo.write("Probabilidades en base a las clases: " + str(result) + "\n")
     # Toma el valor más alto del array y nos devuelve la posición en donde se encuentra
     # el mismo (el índice)
     answer = np.argmax(result)
@@ -54,25 +56,35 @@ def main():
     classIndexAda=0
     pathKira="./test-images/kira/"
     classIndexKira=1
-    print("-------------------------------")
-    print("Predicciones en base a imágenes de Ada:")
+    #print("-------------------------------")
+    #print("Predicciones en base a imágenes de Ada:")
+    archivo.write("------------------------------- \n")
+    archivo.write("Predicciones en base a imágenes de Ada: \n")
     predecirClases(classIndexAda, "Ada", pathAda)
-    print("-------------------------------")
-    print("Predicciones en base a imágenes de Kira:")
+ 
+    #print("-------------------------------")
+    #print("Predicciones en base a imágenes de Kira:")
+    archivo.write("------------------------------- \n")
+    archivo.write("Predicciones en base a imágenes de Kira: \n")
     predecirClases(classIndexKira, "Kira", pathKira)
 
 def predecirClases(classIndex, className, path): 
     cantImg=0
     cantAciertos=0
     for image in os.listdir(path):
-        print("Imagen: " + image)
+        #print("Imagen: " + image)
+        archivo.write("Imagen: " + image + "\n")
         if (predecir(path+image) == classIndex):
-            print("Predicción: es " + className)
+            #print("Predicción: es " + className)
+            archivo.write("Predicción: es " + className + "\n")
             cantAciertos+=1
         else:
-            print("No lo predije correctamente :(")
+            #print("No lo predije correctamente :(")
+            archivo.write("No lo predije correctamente :( \n")
         cantImg+=1
-        print("\n\n")
-    print("Cantidad: " + str(cantImg) + "     Aciertos: " + str(cantAciertos) + "    Ratio: " + str((cantAciertos/cantImg)))
+        #print("\n\n")
+        archivo.write("\n\n")
+    #print("Cantidad: " + str(cantImg) + "     Aciertos: " + str(cantAciertos) + "    Ratio: " + str((cantAciertos/cantImg)))
+    archivo.write("Cantidad: " + str(cantImg) + "     Aciertos: " + str(cantAciertos) + "    Ratio: " + str((cantAciertos/cantImg)) + "\n")
 
 main()

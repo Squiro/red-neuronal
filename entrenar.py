@@ -24,7 +24,7 @@ data_validacion = './data/validacion'
 # Parametros de la red neuronal
 
 # Numero de veces que vamos a iterar sobre el set de datos durante el entrenamiento
-epocas = 10
+epocas = 5
 # Tamaño con el cual vamos a procesar estas imágenes (para el resize de las imagenes)
 altura, longitud = 100, 100
 # Numero de imágenes que vamos a enviar para procesar en cada uno de los pasos
