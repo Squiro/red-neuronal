@@ -1,20 +1,53 @@
+# Necesitamos tener instalados los packages: librosa, matplotlib
+
+import sys
+import os
 import librosa
 import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 
-filename = "./sav.wav"
+pathAudios = "./audios/"
 
-y, sr = librosa.load(filename)
-spectrogram = librosa.feature.melspectrogram(y=y,sr=sr)
+#filename = "./audios/5388153.wav"
+#y, sr = librosa.load(filename)
+#spectrogram = librosa.feature.melspectrogram(y=y,sr=sr)#,win_length=500)
 
-plt.figure(figsize=(10, 4))
-librosa.display.specshow(librosa.power_to_db(spectrogram,
-                                             ref=np.max),
-                         y_axis='mel', fmax=8000,
-                         x_axis='time')
-plt.colorbar(format='%+2.0f dB')
-plt.title('Mel spectrogram')
-plt.tight_layout()
-plt.savefig('spect.png')
+#fig, ax = plt.subplots(1, figsize=(1,1))
+#fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
+#ax.axis('off')
+#librosa.display.specshow(librosa.power_to_db(spectrogram,
+#                                             ref=np.max),
+#                         y_axis='mel', fmax=8000,
+#                         x_axis='time')
+
+#librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
+
+#plt.colorbar(format='%+2.0f dB')
+#plt.title('Espectrograma')
+#plt.tight_layout()
+#plt.savefig('./images/spect.png')
 #plt.show()
+
+
+def main():
+    for audio in os.listdir(pathAudios):
+        crearEspectrograma(audio)
+
+def crearEspectrograma(file):
+    # Obtenemos el nombre dl archivo sin extension
+    filename = os.path.splitext(os.path.basename(file))[0]
+
+    # Usamos magia del package librosa para crear el espectrograma
+    y, sr = librosa.load(pathAudios + file)
+    spectrogram = librosa.feature.melspectrogram(y=y,sr=sr)     #,win_length=500)
+    # Removemos los bordes del espectrograma y ajustamos su tamaño en pixeles (figsize)
+    fig, ax = plt.subplots(1, figsize=(1,1))
+    fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
+    # Removemos los ejes del espectrograma
+    ax.axis('off')
+    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
+    # Guardamos la imagen en el directorio
+    plt.savefig('./images/' + filename + '.png')
+
+main()

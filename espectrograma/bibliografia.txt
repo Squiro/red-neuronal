@@ -1,0 +1,4 @@
+https://stackoverflow.com/questions/29321696/what-is-a-spectrogram-and-how-do-i-set-its-parameters
+https://dsp.stackexchange.com/questions/248/how-do-i-optimize-the-window-lengths-in-stft
+https://librosa.github.io/librosa/generated/librosa.display.specshow.html
+https://librosa.github.io/librosa/generated/librosa.feature.melspectrogram.html
