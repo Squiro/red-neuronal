@@ -6,6 +6,7 @@ from keras.preprocessing.image import load_img, img_to_array
 #from keras.models import load_model
 import tensorflow as tf 
 
+os.remove("prediccion.txt")
 archivo = open("prediccion.txt", "a+")
 longitud, altura = 100, 100
 modelo = './modelo/modelo.h5'
@@ -52,39 +53,33 @@ def predecir(imagepath):
     return answer
 
 def main(): 
-    pathAda="./test-images/ada/"
-    classIndexAda=0
-    pathKira="./test-images/kira/"
-    classIndexKira=1
-    #print("-------------------------------")
-    #print("Predicciones en base a imágenes de Ada:")
+    pathFalse="./test-images/false/"
+    classIndexFalse=0
+    pathTrue="./test-images/true/"
+    classIndexTrue=1
+    #pathP3="./test-images/P3/"
+    #classIndexP3=2
+
     archivo.write("------------------------------- \n")
-    archivo.write("Predicciones en base a imágenes de Ada: \n")
-    predecirClases(classIndexAda, "Ada", pathAda)
- 
-    #print("-------------------------------")
-    #print("Predicciones en base a imágenes de Kira:")
+    archivo.write("Predicciones en base a imágenes de FALSE: \n")
+    predecirClases(classIndexFalse, "false", pathFalse)
+
     archivo.write("------------------------------- \n")
-    archivo.write("Predicciones en base a imágenes de Kira: \n")
-    predecirClases(classIndexKira, "Kira", pathKira)
+    archivo.write("Predicciones en base a imágenes de TRUE: \n")
+    predecirClases(classIndexTrue, "true", pathTrue)
 
 def predecirClases(classIndex, className, path): 
     cantImg=0
     cantAciertos=0
     for image in os.listdir(path):
-        #print("Imagen: " + image)
         archivo.write("Imagen: " + image + "\n")
         if (predecir(path+image) == classIndex):
-            #print("Predicción: es " + className)
             archivo.write("Predicción: es " + className + "\n")
             cantAciertos+=1
         else:
-            #print("No lo predije correctamente :(")
             archivo.write("No lo predije correctamente :( \n")
         cantImg+=1
-        #print("\n\n")
         archivo.write("\n\n")
-    #print("Cantidad: " + str(cantImg) + "     Aciertos: " + str(cantAciertos) + "    Ratio: " + str((cantAciertos/cantImg)))
     archivo.write("Cantidad: " + str(cantImg) + "     Aciertos: " + str(cantAciertos) + "    Ratio: " + str((cantAciertos/cantImg)) + "\n")
 
 main()

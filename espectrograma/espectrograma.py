@@ -7,7 +7,8 @@ import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 
-pathAudios = "./audios/"
+pathAudiosTrue = "./audios/true/"
+pathAudiosFalse = "./audios/false/"
 
 #filename = "./audios/5388153.wav"
 #y, sr = librosa.load(filename)
@@ -31,23 +32,29 @@ pathAudios = "./audios/"
 
 
 def main():
-    for audio in os.listdir(pathAudios):
-        crearEspectrograma(audio)
+    for audio in os.listdir(pathAudiosFalse):
+        crearEspectrograma(pathAudiosFalse, audio, "false")
 
-def crearEspectrograma(file):
+    for audio in os.listdir(pathAudiosTrue):
+        crearEspectrograma(pathAudiosTrue, audio, "true")
+
+def crearEspectrograma(path, file, carpetaDestino):
     # Obtenemos el nombre dl archivo sin extension
     filename = os.path.splitext(os.path.basename(file))[0]
 
-    # Usamos magia del package librosa para crear el espectrograma
-    y, sr = librosa.load(pathAudios + file)
-    spectrogram = librosa.feature.melspectrogram(y=y,sr=sr)     #,win_length=500)
-    # Removemos los bordes del espectrograma y ajustamos su tamaño en pixeles (figsize)
-    fig, ax = plt.subplots(1, figsize=(1,1))
-    fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
-    # Removemos los ejes del espectrograma
-    ax.axis('off')
-    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
-    # Guardamos la imagen en el directorio
-    plt.savefig('./images/' + filename + '.png')
-
+    try: 
+        # Usamos magia del package librosa para crear el espectrograma
+        y, sr = librosa.load(path + file)
+        spectrogram = librosa.feature.melspectrogram(y=y,sr=sr,n_fft=2500,win_length=2500)     #,win_length=500)
+        # Removemos los bordes del espectrograma y ajustamos su tamaño en pixeles (figsize)
+        fig, ax = plt.subplots(1, figsize=(1,1))
+        fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
+        # Removemos los ejes del espectrograma
+        ax.axis('off')
+        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
+        # Guardamos la imagen en el directorio
+        plt.savefig('./images/' + carpetaDestino + '/' + filename + '.png')
+        plt.close()
+    except Exception as e: 
+        print(e)
 main()
