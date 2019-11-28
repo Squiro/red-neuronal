@@ -28,13 +28,17 @@ data_validacion = './data/validacion'
 # Numero de veces que vamos a iterar sobre el set de datos durante el entrenamiento
 epocas = 30
 # Tamaño con el cual vamos a procesar estas imágenes (para el resize de las imagenes)
-altura, longitud = 100, 100
+altura, longitud = 28, 28
 # Numero de imágenes que vamos a enviar para procesar en cada uno de los pasos
 batch_size = 32
-# Número de veces que se va a procesar la información en cada una de las epocas
-pasos = 15
-# Al final de cada una de las epocas, se corren 200 pasos con el set de validación
-pasos_validacion = 15
+# Número de veces que se va a procesar el set de entrenamiento en cada una de las epocas
+# Los pasos están relacionados con el batch size. En general, el valor de los pasos tiene que ser 
+# el resultado de la divisón (cantImages/batch_size)
+pasos = 20
+# Al final de cada una de las epocas, se corren X pasos con el set de validación
+# Sucede lo mismo que con el numero de pasos anterior. El valor es recomendable que sea
+# el resultado de (cantImagenesValidacion/batch_size)
+pasos_validacion = 4
 
 # Número de filtros que vamos a aplicar en cada convolución. 
 # Después de cada convolución nuestra imagen quedará con más profundidad.
@@ -43,9 +47,10 @@ filtrosConv2 = 32
 filtrosConv3 = 64
 
 # Tamaño de los filtros que utilizaremos en cada convolución
-tamano_filtro1 = (3,3)
-tamano_filtro2 = (3,3)
-tamano_filtro3 = (3,3)
+tam_filtro = (3,3)
+#tamano_filtro1 = (3,3)
+#tamano_filtro2 = (3,3)
+#tamano_filtro3 = (3,3)
 
 # Tamaño de filtro que vamos a usar en max pooling
 tamano_pool = (2,2)
@@ -92,15 +97,15 @@ cnn = Sequential()
 # Nuestra primera capa va a ser una convolución con 32 filtros
 # input_shape indica cual es la altura y longitud de las imagenes, y los canales (rgb)
 # Utilizamos relu como activacion
-cnn.add(Convolution2D(filtrosConv1, tamano_filtro1, padding='same', input_shape=(altura, longitud, 3), activation='relu'))
+cnn.add(Convolution2D(filtrosConv1, tam_filtro, padding='same', input_shape=(altura, longitud, 3), activation='relu'))
 # Añadimos una layer de batch normalization
 cnn.add(BatchNormalization())
 
 # Agregamos otra capa de convolucion
-cnn.add(Convolution2D(filtrosConv2, tamano_filtro2, padding='same', activation='relu'))
+cnn.add(Convolution2D(filtrosConv2, tam_filtro, padding='same', activation='relu'))
 cnn.add(BatchNormalization())
 # Agregamos otra capa de convolucion
-cnn.add(Convolution2D(filtrosConv3, tamano_filtro3, padding='same', activation='relu'))
+cnn.add(Convolution2D(filtrosConv3, tam_filtro, padding='same', activation='relu'))
 cnn.add(BatchNormalization())
 
 # Agregamos una capa de pooling, indicando el tamaño del filtro
@@ -119,7 +124,7 @@ cnn.add(Dropout(0.5))
 cnn.add(Dense(64, activation='relu'))
 # Ultima capa, con cant. neuronas = clases. Softmax nos indica la probabilidad
 # de que la imagen sea un gato, perro, gorila...
-cnn.add(Dense(clases, activation='softmax'))
+cnn.add(Dense(clases, activation='sigmoid'))
 
 # Para optimizar nuestro algoritmo. 
 # loss indica qué tan bien o qué tan mal va
