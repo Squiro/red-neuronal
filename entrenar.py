@@ -7,10 +7,12 @@ from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras import optimizers
 # Para que nuestra CNN sea sequencial (aplicamos filtros de forma sequencial)
 from tensorflow.python.keras.models import Sequential
-# 
+# Importamos los diferentes filtros
 from tensorflow.python.keras.layers import Dropout, Flatten, Dense, Activation
 # Para hacer las convoluciones y los Poolings
-from tensorflow.python.keras.layers import Convolution2D, MaxPooling2D
+from tensorflow.python.keras.layers import Convolution2D, MaxPooling2D, BatchNormalization
+# Importamos el batch normalization
+from tensorflow.python.keras.layers.normalization import BatchNormalization
 # Para matar sesiones de keras que estén ejecutándose en segundo plano
 from tensorflow.python.keras import backend as K
 
@@ -24,24 +26,26 @@ data_validacion = './data/validacion'
 # Parametros de la red neuronal
 
 # Numero de veces que vamos a iterar sobre el set de datos durante el entrenamiento
-epocas = 15
+epocas = 30
 # Tamaño con el cual vamos a procesar estas imágenes (para el resize de las imagenes)
 altura, longitud = 100, 100
 # Numero de imágenes que vamos a enviar para procesar en cada uno de los pasos
-batch_size = 16
+batch_size = 32
 # Número de veces que se va a procesar la información en cada una de las epocas
-pasos = 30
+pasos = 15
 # Al final de cada una de las epocas, se corren 200 pasos con el set de validación
-pasos_validacion = 30
+pasos_validacion = 15
 
 # Número de filtros que vamos a aplicar en cada convolución. 
 # Después de cada convolución nuestra imagen quedará con más profundidad.
-filtrosConv1 = 32
-filtrosConv2 = 64
+filtrosConv1 = 16
+filtrosConv2 = 32
+filtrosConv3 = 64
 
 # Tamaño de los filtros que utilizaremos en cada convolución
 tamano_filtro1 = (3,3)
-tamano_filtro2 = (2,2)
+tamano_filtro2 = (3,3)
+tamano_filtro3 = (3,3)
 
 # Tamaño de filtro que vamos a usar en max pooling
 tamano_pool = (2,2)
@@ -89,22 +93,30 @@ cnn = Sequential()
 # input_shape indica cual es la altura y longitud de las imagenes, y los canales (rgb)
 # Utilizamos relu como activacion
 cnn.add(Convolution2D(filtrosConv1, tamano_filtro1, padding='same', input_shape=(altura, longitud, 3), activation='relu'))
+# Añadimos una layer de batch normalization
+cnn.add(BatchNormalization())
+
+# Agregamos otra capa de convolucion
+cnn.add(Convolution2D(filtrosConv2, tamano_filtro2, padding='same', activation='relu'))
+cnn.add(BatchNormalization())
+# Agregamos otra capa de convolucion
+cnn.add(Convolution2D(filtrosConv3, tamano_filtro3, padding='same', activation='relu'))
+cnn.add(BatchNormalization())
 
 # Agregamos una capa de pooling, indicando el tamaño del filtro
 cnn.add(MaxPooling2D(pool_size=tamano_pool))
 
-# Agregamos otra capa de convolucion
-cnn.add(Convolution2D(filtrosConv2, tamano_filtro2, padding='same', activation='relu'))
-
 # Agregamos otro pooling
-cnn.add(MaxPooling2D(pool_size=tamano_pool))
+#cnn.add(MaxPooling2D(pool_size=tamano_pool))
 
 # Aplanamos la imagen en una dimension que contendrá toda la información
 cnn.add(Flatten())
 # Lo mandamos a una capa de 256 neuronas
-cnn.add(Dense(256, activation='relu'))
+cnn.add(Dense(128, activation='relu'))
 # A la anterior capa le apagamos el 50% de las neuronas en cada paso, de manera aleatoria
 cnn.add(Dropout(0.5))
+# Lo mandamos a una capa de 64
+cnn.add(Dense(64, activation='relu'))
 # Ultima capa, con cant. neuronas = clases. Softmax nos indica la probabilidad
 # de que la imagen sea un gato, perro, gorila...
 cnn.add(Dense(clases, activation='softmax'))

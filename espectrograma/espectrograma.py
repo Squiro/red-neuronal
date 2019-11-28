@@ -44,10 +44,13 @@ def crearEspectrograma(path, file, carpetaDestino):
 
     try: 
         # Usamos magia del package librosa para crear el espectrograma
-        y, sr = librosa.load(path + file)
+        # https://librosa.github.io/librosa/generated/librosa.core.load.html
+        # offset: cuantos segundos nos desplazamos desde el archivo original (float)
+        # duration: cuantos segundos de audio leemos (float)
+        y, sr = librosa.load(path + file, offset=2.0, duration=3.0)
         spectrogram = librosa.feature.melspectrogram(y=y,sr=sr,n_fft=2500,win_length=2500)     #,win_length=500)
         # Removemos los bordes del espectrograma y ajustamos su tamaño en pixeles (figsize)
-        fig, ax = plt.subplots(1, figsize=(1,1))
+        fig, ax = plt.subplots(1, figsize=(3,3))
         fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
         # Removemos los ejes del espectrograma
         ax.axis('off')
