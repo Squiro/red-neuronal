@@ -2,19 +2,22 @@
 
 import sys
 import os
+
+# Import para asegurarnos la compatibilidad del código para ser ejecutado en tensforflow 2.0
+# Aunque esto no nos da ninguna de las ventajas de tf 2.0
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 # Para preprocesar las imágenes que vamos darle a la CNN
-from tensorflow.python.keras.preprocessing.image import ImageDataGenerator 
-from tensorflow.python.keras import optimizers
+from tensorflow.compat.v1.keras.preprocessing.image import ImageDataGenerator 
+from tensorflow.compat.v1.keras import optimizers
 # Para que nuestra CNN sea sequencial (aplicamos filtros de forma sequencial)
-from tensorflow.python.keras.models import Sequential
+from tensorflow.compat.v1.keras.models import Sequential
 # Importamos los diferentes filtros
-from tensorflow.python.keras.layers import Dropout, Flatten, Dense, Activation
+from tensorflow.compat.v1.keras.layers import Dropout, Flatten, Dense, Activation
 # Para hacer las convoluciones y los Poolings
-from tensorflow.python.keras.layers import Convolution2D, MaxPooling2D, BatchNormalization
-# Importamos el batch normalization
-from tensorflow.python.keras.layers.normalization import BatchNormalization
+from tensorflow.compat.v1.keras.layers import Convolution2D, MaxPooling2D, BatchNormalization
 # Para matar sesiones de keras que estén ejecutándose en segundo plano
-from tensorflow.python.keras import backend as K
+from tensorflow.compat.v1.keras import backend as K
 
 # Empezamos un entrenamiento desde 0
 K.clear_session()
@@ -62,8 +65,8 @@ clases = 2
 # para acercarse a una solución óptima
 lr=0.0005
 
-# Pre procesamiento de imagenes
-
+# Pre procesamiento de imagenes, lo que hacemos es tanto NORMALIZAR el set de datos 
+# como AUMENTAR el set (data augmentation). 
 entrenamiento_datagen = ImageDataGenerator(
 	rescale=1./255, # Hacemos que todos los píxeles estén en un rango de 0 a 1
 	shear_range=0.3, # Para que algunas imagenes esten inclinadas
@@ -97,34 +100,31 @@ cnn = Sequential()
 # Nuestra primera capa va a ser una convolución con 32 filtros
 # input_shape indica cual es la altura y longitud de las imagenes, y los canales (rgb)
 # Utilizamos relu como activacion
-cnn.add(Convolution2D(filtrosConv1, tam_filtro, padding='same', input_shape=(altura, longitud, 3), activation='relu'))
-# Añadimos una layer de batch normalization
+cnn.add(Convolution2D(filtrosConv1, tam_filtro, padding='same', strides=1, input_shape=(altura, longitud, 3), activation='relu'))
+# Añadimos una layer de batch normalization para normalizar el lote de datos entre capas
 cnn.add(BatchNormalization())
 
 # Agregamos otra capa de convolucion
-cnn.add(Convolution2D(filtrosConv2, tam_filtro, padding='same', activation='relu'))
+cnn.add(Convolution2D(filtrosConv2, tam_filtro, padding='same', strides=1, activation='relu'))
 cnn.add(BatchNormalization())
 # Agregamos otra capa de convolucion
-cnn.add(Convolution2D(filtrosConv3, tam_filtro, padding='same', activation='relu'))
+cnn.add(Convolution2D(filtrosConv3, tam_filtro, padding='same', strides=1, activation='relu'))
 cnn.add(BatchNormalization())
 
 # Agregamos una capa de pooling, indicando el tamaño del filtro
-cnn.add(MaxPooling2D(pool_size=tamano_pool))
-
-# Agregamos otro pooling
-#cnn.add(MaxPooling2D(pool_size=tamano_pool))
+cnn.add(MaxPooling2D(pool_size=tamano_pool, strides=2))
 
 # Aplanamos la imagen en una dimension que contendrá toda la información
 cnn.add(Flatten())
 # Lo mandamos a una capa de 256 neuronas
 cnn.add(Dense(128, activation='relu'))
 # A la anterior capa le apagamos el 50% de las neuronas en cada paso, de manera aleatoria
-cnn.add(Dropout(0.5))
+#cnn.add(Dropout(0.5))
 # Lo mandamos a una capa de 64
 cnn.add(Dense(64, activation='relu'))
 # Ultima capa, con cant. neuronas = clases. Softmax nos indica la probabilidad
 # de que la imagen sea un gato, perro, gorila...
-cnn.add(Dense(clases, activation='sigmoid'))
+cnn.add(Dense(clases, activation='softmax'))
 
 # Para optimizar nuestro algoritmo. 
 # loss indica qué tan bien o qué tan mal va

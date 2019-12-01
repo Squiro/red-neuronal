@@ -1,14 +1,14 @@
 import sys
 import os
 import numpy as np
-import keras.backend as kerasBackend
+#import keras.backend as kerasBackend
 from keras.preprocessing.image import load_img, img_to_array
 #from keras.models import load_model
-import tensorflow as tf 
+import tensorflow.compat.v1 as tf 
 
 os.remove("prediccion.txt")
 archivo = open("prediccion.txt", "a+")
-longitud, altura = 100, 100
+longitud, altura = 28, 28
 modelo = './modelo/modelo.h5'
 pesos_modelo = './modelo/pesos.h5'
 cnn = tf.keras.models.load_model(modelo)#= load_model(modelo)
@@ -32,7 +32,8 @@ def predecir(imagepath):
     array = cnn.predict(image)
     # Tomamos la dimensión la primera dimensión. e.g. [1,0,0]
     result = array[0]
-    #print("Probabilidades en base a las clases: " + str(result))
+    
+    print("Probabilidades en base a las clases: " + str(result))
     archivo.write("Probabilidades en base a las clases: " + str(result) + "\n")
     # Toma el valor más alto del array y nos devuelve la posición en donde se encuentra
     # el mismo (el índice)
@@ -57,8 +58,6 @@ def main():
     classIndexFalse=0
     pathTrue="./test-images/true/"
     classIndexTrue=1
-    #pathP3="./test-images/P3/"
-    #classIndexP3=2
 
     archivo.write("------------------------------- \n")
     archivo.write("Predicciones en base a imágenes de FALSE: \n")

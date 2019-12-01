@@ -1,106 +1,46 @@
 ------------------------------- 
-Predicciones en base a imágenes de Ada: 
-Imagen: ada.jpeg
-Probabilidades en base a las clases: [0.25577763 0.74422234]
-No lo predije correctamente :( 
+Predicciones en base a imágenes de FALSE: 
+Imagen: 5821104false.png
+Probabilidades en base a las clases: [1. 1.]
+Predicción: es false
 
 
-Imagen: ada2.jpg
-Probabilidades en base a las clases: [0.9759469  0.02405307]
-Predicción: es Ada
+Imagen: 5821355false.png
+Probabilidades en base a las clases: [1. 1.]
+Predicción: es false
 
 
-Imagen: IMG-20170116-WA0011.jpg
-Probabilidades en base a las clases: [0.2775125  0.72248757]
-No lo predije correctamente :( 
+Imagen: 5821829false.png
+Probabilidades en base a las clases: [1.         0.99999964]
+Predicción: es false
 
 
-Imagen: IMG-20170118-WA0031.jpeg
-Probabilidades en base a las clases: [0.9972619  0.00273811]
-Predicción: es Ada
+Imagen: 5827293false.png
+Probabilidades en base a las clases: [1.         0.99999857]
+Predicción: es false
 
 
-Imagen: IMG-20170124-WA0036.jpeg
-Probabilidades en base a las clases: [0.9961099 0.0038901]
-Predicción: es Ada
-
-
-Imagen: IMG-20170124-WA0039.jpeg
-Probabilidades en base a las clases: [0.23851621 0.76148385]
-No lo predije correctamente :( 
-
-
-Imagen: IMG-20170125-WA0013.jpeg
-Probabilidades en base a las clases: [0.54173213 0.4582679 ]
-Predicción: es Ada
-
-
-Imagen: IMG-20170207-WA0016.jpg
-Probabilidades en base a las clases: [0.87105715 0.12894282]
-Predicción: es Ada
-
-
-Imagen: IMG-20170212-WA0011.jpeg
-Probabilidades en base a las clases: [0.99086225 0.00913775]
-Predicción: es Ada
-
-
-Imagen: IMG-20170212-WA0014.jpeg
-Probabilidades en base a las clases: [0.8087804  0.19121957]
-Predicción: es Ada
-
-
-Imagen: IMG-20170212-WA0022.jpeg
-Probabilidades en base a las clases: [0.6983053  0.30169475]
-Predicción: es Ada
-
-
-Imagen: IMG-20170215-WA0027.jpeg
-Probabilidades en base a las clases: [0.5900512  0.40994877]
-Predicción: es Ada
-
-
-Imagen: WhatsApp Image 2019-10-11 at 18.55.51.jpeg
-Probabilidades en base a las clases: [0.01763001 0.98237   ]
-No lo predije correctamente :( 
-
-
-Cantidad: 13     Aciertos: 9    Ratio: 0.6923076923076923
+Cantidad: 4     Aciertos: 4    Ratio: 1.0
 ------------------------------- 
-Predicciones en base a imágenes de Kira: 
-Imagen: IMG-20190115-WA0017.jpg
-Probabilidades en base a las clases: [0.21685055 0.7831494 ]
-Predicción: es Kira
-
-
-Imagen: IMG-20190115-WA0018.jpg
-Probabilidades en base a las clases: [0.11892261 0.88107747]
-Predicción: es Kira
-
-
-Imagen: IMG-20190127-WA0010.jpg
-Probabilidades en base a las clases: [0.07301554 0.9269845 ]
-Predicción: es Kira
-
-
-Imagen: IMG-20190321-WA0017.jpg
-Probabilidades en base a las clases: [0.04504707 0.9549529 ]
-Predicción: es Kira
-
-
-Imagen: IMG-20190325-WA0007.jpg
-Probabilidades en base a las clases: [0.0114727 0.9885273]
-Predicción: es Kira
-
-
-Imagen: IMG-20190403-WA0015.jpg
-Probabilidades en base a las clases: [0.38488573 0.6151142 ]
-Predicción: es Kira
-
-
-Imagen: kira3.jpg
-Probabilidades en base a las clases: [0.64836246 0.3516375 ]
+Predicciones en base a imágenes de TRUE: 
+Imagen: 5933409true.png
+Probabilidades en base a las clases: [1. 1.]
 No lo predije correctamente :( 
 
 
-Cantidad: 7     Aciertos: 6    Ratio: 0.8571428571428571
+Imagen: 5934501true.png
+Probabilidades en base a las clases: [1.         0.99999833]
+No lo predije correctamente :( 
+
+
+Imagen: 5942649true.png
+Probabilidades en base a las clases: [1.        0.9999938]
+No lo predije correctamente :( 
+
+
+Imagen: 5943025true.png
+Probabilidades en base a las clases: [1. 1.]
+No lo predije correctamente :( 
+
+
+Cantidad: 4     Aciertos: 0    Ratio: 0.0
