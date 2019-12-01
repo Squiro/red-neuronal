@@ -82,6 +82,7 @@ imagen_entrenamiento = entrenamiento_datagen.flow_from_directory(
 	data_entrenamiento,
 	target_size=(altura, longitud), 
 	batch_size=batch_size,
+	color_mode="rgb",
 	class_mode='categorical'
 )
 
@@ -89,11 +90,11 @@ imagen_validacion = validacion_datagen.flow_from_directory(
 	data_validacion,
 	target_size=(altura, longitud),
 	batch_size=batch_size,
+	color_mode="rgb",
 	class_mode='categorical'
 )
 
 # Creamos la CNN
-
 # Indicamos que nuestra red neuronal es secuencial
 cnn = Sequential() 
 
