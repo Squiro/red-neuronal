@@ -38,8 +38,8 @@ def predecir(imagepath):
     # Toma el valor más alto del array y nos devuelve la posición en donde se encuentra
     # el mismo (el índice)
     answer = np.argmax(result)
-    # If it’s a classification problem,then what the model outputs will corresponds to what you trained it on.
-    # If you do flow from directory, then the classes will be in alphabetical order.
+    # "If it’s a classification problem,then what the model outputs will corresponds to what you trained it on.
+    # If you do flow from directory, then the classes will be in alphabetical order.""
 
     # Nosotros utilizamos flow from directory al momento de alimentar las imágenes a
     # la CNN. Entonces, si está en orden alfabético, los indices serán
@@ -47,10 +47,6 @@ def predecir(imagepath):
     # B -- 1
     # Y así.
 
-    #if answer == 0:
-    #    print("Predicción: es Ada")
-    #elif answer == 1:
-    #    print("Predicción: es Kira")
     return answer
 
 def main(): 
