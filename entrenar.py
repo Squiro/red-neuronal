@@ -3,21 +3,23 @@
 import sys
 import os
 
-# Import para asegurarnos la compatibilidad del código para ser ejecutado en tensforflow 2.0
-# Aunque esto no nos da ninguna de las ventajas de tf 2.0
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
+import numpy as np
+from pathlib import Path
+from PIL import Image
+
+# Importamos tensorflow
+import tensorflow as tf
 # Para preprocesar las imágenes que vamos darle a la CNN
-from tensorflow.compat.v1.keras.preprocessing.image import ImageDataGenerator 
-from tensorflow.compat.v1.keras import optimizers
+from tensorflow.keras.preprocessing.image import ImageDataGenerator 
+from tensorflow.keras import optimizers
 # Para que nuestra CNN sea sequencial (aplicamos filtros de forma sequencial)
-from tensorflow.compat.v1.keras.models import Sequential
+from tensorflow.keras.models import Sequential
 # Importamos los diferentes filtros
-from tensorflow.compat.v1.keras.layers import Dropout, Flatten, Dense, Activation
+from tensorflow.keras.layers import Dropout, Flatten, Dense, Activation
 # Para hacer las convoluciones y los Poolings
-from tensorflow.compat.v1.keras.layers import Convolution2D, MaxPooling2D, BatchNormalization
+from tensorflow.keras.layers import Convolution2D, MaxPooling2D, BatchNormalization
 # Para matar sesiones de keras que estén ejecutándose en segundo plano
-from tensorflow.compat.v1.keras import backend as K
+from tensorflow.keras import backend as K
 
 # Empezamos un entrenamiento desde 0
 K.clear_session()
@@ -51,9 +53,6 @@ filtrosConv3 = 64
 
 # Tamaño de los filtros que utilizaremos en cada convolución
 tam_filtro = (3,3)
-#tamano_filtro1 = (3,3)
-#tamano_filtro2 = (3,3)
-#tamano_filtro3 = (3,3)
 
 # Tamaño de filtro que vamos a usar en max pooling
 tamano_pool = (2,2)
@@ -63,19 +62,32 @@ clases = 2
 
 # Learning rate, qué tan grandes deben ser los ajustes que realice la red neuronal
 # para acercarse a una solución óptima
-lr=0.0005
+lr=0.00003
+
+def read_pil_image(img_path, height, width):
+	with open(img_path, 'rb') as f:
+		return np.array(Image.open(f).convert('RGB').resize((width, height)))
+
+def load_all_images(dataset_path, height, width, img_ext='png'):
+    return np.array([read_pil_image(str(p), height, width) for p in 
+                                    Path(dataset_path).rglob("*."+img_ext)]) 
 
 # Pre procesamiento de imagenes, lo que hacemos es tanto NORMALIZAR el set de datos 
 # como AUMENTAR el set (data augmentation). 
 entrenamiento_datagen = ImageDataGenerator(
-	rescale=1./255, # Hacemos que todos los píxeles estén en un rango de 0 a 1
-	shear_range=0.3, # Para que algunas imagenes esten inclinadas
-	zoom_range=0.3, # Para que a algunas imagenes les haga zoom
-	horizontal_flip=True # Invertir horizontalmente las imagenes
+	#featurewise_center=True,
+	rescale=1./255#, # Hacemos que todos los píxeles estén en un rango de 0 a 1
+	#shear_range=0.3, # Para que algunas imagenes esten inclinadas
+	#zoom_range=0.3, # Para que a algunas imagenes les haga zoom
+	#horizontal_flip=True, # Invertir horizontalmente las imagenes
 )
 
+#entrenamiento_datagen.fit(load_all_images("./samples", altura, longitud))
+
 # Le damos las imágenes tal cual son en la validación
-validacion_datagen = ImageDataGenerator(rescale=1./255)
+validacion_datagen = ImageDataGenerator(rescale=1./255) #featurewise_center=True)
+
+#validacion_datagen.fit(load_all_images("./samples", altura, longitud))
 
 # Procesa todas las imagenes que esten dentro de las carpetas
 imagen_entrenamiento = entrenamiento_datagen.flow_from_directory(

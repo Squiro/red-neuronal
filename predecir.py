@@ -2,16 +2,16 @@ import sys
 import os
 import numpy as np
 #import keras.backend as kerasBackend
-from keras.preprocessing.image import load_img, img_to_array
-#from keras.models import load_model
-import tensorflow.compat.v1 as tf 
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+from tensorflow.keras.models import load_model
+import tensorflow as tf 
 
 os.remove("prediccion.txt")
 archivo = open("prediccion.txt", "a+")
 longitud, altura = 28, 28
 modelo = './modelo/modelo.h5'
 pesos_modelo = './modelo/pesos.h5'
-cnn = tf.keras.models.load_model(modelo)#= load_model(modelo)
+cnn = load_model(modelo)
 cnn.load_weights(pesos_modelo)
 
 def predecir(imagepath):
