@@ -75,8 +75,10 @@ def load_all_images(dataset_path, height, width, img_ext='png'):
 # Pre procesamiento de imagenes, lo que hacemos es tanto NORMALIZAR el set de datos 
 # como AUMENTAR el set (data augmentation). 
 entrenamiento_datagen = ImageDataGenerator(
+	rescale=1./255, # Hacemos que todos los píxeles estén en un rango de 0 a 1
+	width_shift_range=0.3,
+	brightness_range=(0.5, 1.0),		
 	#featurewise_center=True,
-	rescale=1./255#, # Hacemos que todos los píxeles estén en un rango de 0 a 1
 	#shear_range=0.3, # Para que algunas imagenes esten inclinadas
 	#zoom_range=0.3, # Para que a algunas imagenes les haga zoom
 	#horizontal_flip=True, # Invertir horizontalmente las imagenes

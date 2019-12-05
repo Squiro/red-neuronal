@@ -1,46 +1,46 @@
 ------------------------------- 
 Predicciones en base a imágenes de FALSE: 
 Imagen: 5821104false.png
-Probabilidades en base a las clases: [0.12682945 0.87317055]
+Probabilidades en base a las clases: [0.33395916 0.6660408 ]
 No lo predije correctamente :( 
 
 
 Imagen: 5821355false.png
-Probabilidades en base a las clases: [0.39153025 0.6084697 ]
+Probabilidades en base a las clases: [0.29242548 0.70757455]
 No lo predije correctamente :( 
 
 
 Imagen: 5821829false.png
-Probabilidades en base a las clases: [0.62080485 0.37919515]
+Probabilidades en base a las clases: [0.7831568  0.21684319]
 Predicción: es false
 
 
 Imagen: 5827293false.png
-Probabilidades en base a las clases: [0.75027907 0.24972093]
-Predicción: es false
+Probabilidades en base a las clases: [0.31715608 0.6828439 ]
+No lo predije correctamente :( 
 
 
-Cantidad: 4     Aciertos: 2    Ratio: 0.5
+Cantidad: 4     Aciertos: 1    Ratio: 0.25
 ------------------------------- 
 Predicciones en base a imágenes de TRUE: 
 Imagen: 5933409true.png
-Probabilidades en base a las clases: [0.3823257 0.6176743]
+Probabilidades en base a las clases: [0.4508171 0.5491829]
 Predicción: es true
 
 
 Imagen: 5934501true.png
-Probabilidades en base a las clases: [0.48702046 0.5129795 ]
-Predicción: es true
+Probabilidades en base a las clases: [0.68423194 0.31576812]
+No lo predije correctamente :( 
 
 
 Imagen: 5942649true.png
-Probabilidades en base a las clases: [0.24903911 0.7509608 ]
+Probabilidades en base a las clases: [0.37460366 0.6253964 ]
 Predicción: es true
 
 
 Imagen: 5943025true.png
-Probabilidades en base a las clases: [0.21902765 0.7809723 ]
+Probabilidades en base a las clases: [0.12405625 0.8759437 ]
 Predicción: es true
 
 
-Cantidad: 4     Aciertos: 4    Ratio: 1.0
+Cantidad: 4     Aciertos: 3    Ratio: 0.75

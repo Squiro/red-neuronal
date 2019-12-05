@@ -16,3 +16,7 @@ https://idreporter.net/v/video-09_gmAeHIW0.html
 Backpropagation
 
 https://skymind.ai/wiki/backpropagation
+
+Data Augmentation
+
+https://towardsdatascience.com/exploring-image-data-augmentation-with-keras-and-tensorflow-a8162d89b844
