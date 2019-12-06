@@ -39,11 +39,11 @@ batch_size = 32
 # Número de veces que se va a procesar el set de entrenamiento en cada una de las epocas
 # Los pasos están relacionados con el batch size. En general, el valor de los pasos tiene que ser 
 # el resultado de la divisón (cantImages/batch_size)
-pasos = 20
+pasos = 15
 # Al final de cada una de las epocas, se corren X pasos con el set de validación
 # Sucede lo mismo que con el numero de pasos anterior. El valor es recomendable que sea
 # el resultado de (cantImagenesValidacion/batch_size)
-pasos_validacion = 4
+pasos_validacion = 6
 
 # Número de filtros que vamos a aplicar en cada convolución. 
 # Después de cada convolución nuestra imagen quedará con más profundidad.
@@ -77,7 +77,7 @@ def load_all_images(dataset_path, height, width, img_ext='png'):
 entrenamiento_datagen = ImageDataGenerator(
 	rescale=1./255, # Hacemos que todos los píxeles estén en un rango de 0 a 1
 	width_shift_range=0.3,
-	brightness_range=(0.5, 1.0),		
+	brightness_range=(0.5, 1.0)#,		
 	#featurewise_center=True,
 	#shear_range=0.3, # Para que algunas imagenes esten inclinadas
 	#zoom_range=0.3, # Para que a algunas imagenes les haga zoom

@@ -5,16 +5,32 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.models import load_model
 import tensorflow as tf 
+import csv
 
-os.remove("prediccion.txt")
-archivo = open("prediccion.txt", "a+")
 longitud, altura = 28, 28
 modelo = './modelo/modelo.h5'
 pesos_modelo = './modelo/pesos.h5'
+# Cargamos el modelo de la CNN
 cnn = load_model(modelo)
+# Cargamos los pesos
 cnn.load_weights(pesos_modelo)
 
-def predecir(imagepath):
+# Borramos el txt de predicciones antes de empezar
+if (os.path.isfile("prediccion.txt")):
+    os.remove("prediccion.txt")
+# Abrimos / creamos el txt de predicciones
+preddicionesTxt = open("prediccion.txt", "a+")
+
+# Borramos el csv de predicciones antes de empezar
+if (os.path.isfile("predcsv.csv")):
+    os.remove("predcsv.csv")
+# Abrimos / creamos el txt de predicciones
+predcsv = open("predcsv.csv", "a+")
+# Creamos un writer para poder escribir en el csv
+predcsv_writer = csv.writer(predcsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+predcsv_writer.writerow(['Imagen', 'Prob. Sano', 'Prob. Enfermo'])
+
+def predecir(imagepath, imagename):
     # Cargamos la imagen
     image = load_img(imagepath, target_size=(longitud, altura))
     # Convertimos la imagen en un arreglo de valores que la representa 
@@ -34,7 +50,9 @@ def predecir(imagepath):
     result = array[0]
     
     print("Probabilidades en base a las clases: " + str(result))
-    archivo.write("Probabilidades en base a las clases: " + str(result) + "\n")
+    preddicionesTxt.write("Probabilidades en base a las clases: " + str(result) + "\n")
+    
+    predcsv_writer.writerow([imagename, str(result[0]), str(result[1])])
     # Toma el valor más alto del array y nos devuelve la posición en donde se encuentra
     # el mismo (el índice)
     answer = np.argmax(result)
@@ -55,26 +73,26 @@ def main():
     pathTrue="./test-images/true/"
     classIndexTrue=1
 
-    archivo.write("------------------------------- \n")
-    archivo.write("Predicciones en base a imágenes de FALSE: \n")
+    preddicionesTxt.write("------------------------------- \n")
+    preddicionesTxt.write("Predicciones en base a imágenes de FALSE (Sanos): \n")
     predecirClases(classIndexFalse, "false", pathFalse)
 
-    archivo.write("------------------------------- \n")
-    archivo.write("Predicciones en base a imágenes de TRUE: \n")
+    preddicionesTxt.write("------------------------------- \n")
+    preddicionesTxt.write("Predicciones en base a imágenes de TRUE (Enfermos): \n")
     predecirClases(classIndexTrue, "true", pathTrue)
 
 def predecirClases(classIndex, className, path): 
     cantImg=0
     cantAciertos=0
     for image in os.listdir(path):
-        archivo.write("Imagen: " + image + "\n")
-        if (predecir(path+image) == classIndex):
-            archivo.write("Predicción: es " + className + "\n")
+        preddicionesTxt.write("Imagen: " + image + "\n")
+        if (predecir(path+image, image) == classIndex):
+            preddicionesTxt.write("Predicción: es " + className + "\n")
             cantAciertos+=1
         else:
-            archivo.write("No lo predije correctamente :( \n")
+            preddicionesTxt.write("No lo predije correctamente :( \n")
         cantImg+=1
-        archivo.write("\n\n")
-    archivo.write("Cantidad: " + str(cantImg) + "     Aciertos: " + str(cantAciertos) + "    Ratio: " + str((cantAciertos/cantImg)) + "\n")
+        preddicionesTxt.write("\n\n")
+    preddicionesTxt.write("Cantidad: " + str(cantImg) + "     Aciertos: " + str(cantAciertos) + "    Ratio: " + str((cantAciertos/cantImg)) + "\n")
 
 main()
