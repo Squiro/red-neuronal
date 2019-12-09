@@ -76,8 +76,10 @@ def load_all_images(dataset_path, height, width, img_ext='png'):
 # como AUMENTAR el set (data augmentation). 
 entrenamiento_datagen = ImageDataGenerator(
 	rescale=1./255, # Hacemos que todos los píxeles estén en un rango de 0 a 1
-	width_shift_range=0.3,
-	brightness_range=(0.5, 1.0)#,		
+	width_shift_range=0.3, # Mueve la imagen hacia la izquierda o derecha
+	brightness_range=(0.5, 1.0) # Cambia el brillo d las imágenes según el rango especificado		
+	
+	
 	#featurewise_center=True,
 	#shear_range=0.3, # Para que algunas imagenes esten inclinadas
 	#zoom_range=0.3, # Para que a algunas imagenes les haga zoom
@@ -86,7 +88,7 @@ entrenamiento_datagen = ImageDataGenerator(
 
 #entrenamiento_datagen.fit(load_all_images("./samples", altura, longitud))
 
-# Le damos las imágenes tal cual son en la validación
+# Le damos las imágenes tal cual son en la validación, solo que con un rescale
 validacion_datagen = ImageDataGenerator(rescale=1./255) #featurewise_center=True)
 
 #validacion_datagen.fit(load_all_images("./samples", altura, longitud))

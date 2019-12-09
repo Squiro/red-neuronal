@@ -20,3 +20,11 @@ https://skymind.ai/wiki/backpropagation
 Data Augmentation
 
 https://towardsdatascience.com/exploring-image-data-augmentation-with-keras-and-tensorflow-a8162d89b844
+
+Data sets de habla (speech)
+
+https://github.com/talhanai/speech-nlp-datasets
+
+Reconocimiento del habla con redes neuronales
+
+https://dkopczyk.quantee.co.uk/speech-nn/ 
