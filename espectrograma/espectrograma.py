@@ -42,10 +42,10 @@ def main():
     for audio in listaFalse[porcentaje(len(listaFalse), 70):len(listaFalse)]:
         crearEspectrograma(pathAudiosFalse, audio, "../data/validacion/false")
 
-    for audio in listaFalse[1:porcentaje(len(listaTrue), 70)]:
+    for audio in listaTrue[1:porcentaje(len(listaTrue), 70)]:
         crearEspectrograma(pathAudiosTrue, audio, "../data/entrenamiento/true")
     
-    for audio in listaFalse[porcentaje(len(listaTrue), 70):len(listaTrue)]:
+    for audio in listaTrue[porcentaje(len(listaTrue), 70):len(listaTrue)]:
         crearEspectrograma(pathAudiosTrue, audio, "../data/validacion/true")
 
 def porcentaje(num, porciento):   
