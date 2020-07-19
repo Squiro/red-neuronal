@@ -19,3 +19,13 @@ Paquetes necesarios
 -SciPy
 -Keras
 
+---
+
+Optimal batch size: https://dmitry.ai/t/topic/100/2
+
+---
+
+Overfitting: If your training loss is much lower than validation loss then this means the network might be overfitting. Solutions to this are to decrease your network size, or to increase dropout. For example you could try dropout of 0.5 and so on.
+
+Underfitting: If your training/validation loss are about equal then your model is underfitting. Increase the size of your model (either number of layers or the raw number of neurons per layer)
+

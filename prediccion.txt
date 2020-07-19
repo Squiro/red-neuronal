@@ -1,0 +1,1146 @@
+------------------------------- 
+Predicciones en base a imágenes de FALSE (Sanos): 
+Imagen: 5388127false.png
+Probabilidades en base a las clases: [0.88667315 0.11332688]
+Predicción: es false
+
+
+Imagen: 5388212false.png
+Probabilidades en base a las clases: [0.5269789  0.47302115]
+Predicción: es false
+
+
+Imagen: 5388408false.png
+Probabilidades en base a las clases: [0.38458613 0.61541384]
+No lo predije correctamente :( 
+
+
+Imagen: 5388720false.png
+Probabilidades en base a las clases: [0.31850475 0.6814953 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5388776false.png
+Probabilidades en base a las clases: [0.87957317 0.12042685]
+Predicción: es false
+
+
+Imagen: 5388873false.png
+Probabilidades en base a las clases: [0.44184119 0.55815876]
+No lo predije correctamente :( 
+
+
+Imagen: 5388960false.png
+Probabilidades en base a las clases: [0.8153311  0.18466891]
+Predicción: es false
+
+
+Imagen: 5389004false.png
+Probabilidades en base a las clases: [0.25562885 0.7443711 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5389087false.png
+Probabilidades en base a las clases: [0.36760238 0.63239765]
+No lo predije correctamente :( 
+
+
+Imagen: 5389088false.png
+Probabilidades en base a las clases: [0.07667834 0.92332166]
+No lo predije correctamente :( 
+
+
+Imagen: 5389204false.png
+Probabilidades en base a las clases: [0.85645103 0.14354895]
+Predicción: es false
+
+
+Imagen: 5389264false.png
+Probabilidades en base a las clases: [0.3779316  0.62206835]
+No lo predije correctamente :( 
+
+
+Imagen: 5389266false.png
+Probabilidades en base a las clases: [0.551976   0.44802403]
+Predicción: es false
+
+
+Imagen: 5389415false.png
+Probabilidades en base a las clases: [0.16149095 0.838509  ]
+No lo predije correctamente :( 
+
+
+Imagen: 5389426false.png
+Probabilidades en base a las clases: [0.74761325 0.25238675]
+Predicción: es false
+
+
+Imagen: 5389557false.png
+Probabilidades en base a las clases: [0.39938405 0.600616  ]
+No lo predije correctamente :( 
+
+
+Imagen: 5389562false.png
+Probabilidades en base a las clases: [0.84944403 0.15055597]
+Predicción: es false
+
+
+Imagen: 5389699false.png
+Probabilidades en base a las clases: [0.36430952 0.63569057]
+No lo predije correctamente :( 
+
+
+Imagen: 5389919false.png
+Probabilidades en base a las clases: [0.26433793 0.7356621 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5390166false.png
+Probabilidades en base a las clases: [0.8428486  0.15715143]
+Predicción: es false
+
+
+Imagen: 5390325false.png
+Probabilidades en base a las clases: [0.4384421 0.5615578]
+No lo predije correctamente :( 
+
+
+Imagen: 5390390false.png
+Probabilidades en base a las clases: [0.348153   0.65184706]
+No lo predije correctamente :( 
+
+
+Imagen: 5390619false.png
+Probabilidades en base a las clases: [0.8454299  0.15457015]
+Predicción: es false
+
+
+Imagen: 5390766false.png
+Probabilidades en base a las clases: [0.17063023 0.8293697 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5391224false.png
+Probabilidades en base a las clases: [0.42195535 0.57804465]
+No lo predije correctamente :( 
+
+
+Imagen: 5391248false.png
+Probabilidades en base a las clases: [0.79386866 0.20613128]
+Predicción: es false
+
+
+Imagen: 5391328false.png
+Probabilidades en base a las clases: [0.7842871  0.21571285]
+Predicción: es false
+
+
+Imagen: 5391400false.png
+Probabilidades en base a las clases: [0.6011778  0.39882216]
+Predicción: es false
+
+
+Imagen: 5391445false.png
+Probabilidades en base a las clases: [0.5889407  0.41105938]
+Predicción: es false
+
+
+Imagen: 5391820false.png
+Probabilidades en base a las clases: [0.43694514 0.56305486]
+No lo predije correctamente :( 
+
+
+Imagen: 5391833false.png
+Probabilidades en base a las clases: [0.7533161  0.24668391]
+Predicción: es false
+
+
+Imagen: 5391920false.png
+Probabilidades en base a las clases: [0.7714368  0.22856317]
+Predicción: es false
+
+
+Imagen: 5391982false.png
+Probabilidades en base a las clases: [0.32846656 0.67153347]
+No lo predije correctamente :( 
+
+
+Imagen: 5392053false.png
+Probabilidades en base a las clases: [0.6276749  0.37232512]
+Predicción: es false
+
+
+Imagen: 5392112false.png
+Probabilidades en base a las clases: [0.2869629  0.71303713]
+No lo predije correctamente :( 
+
+
+Imagen: 5392265false.png
+Probabilidades en base a las clases: [0.44512293 0.5548771 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5392294false.png
+Probabilidades en base a las clases: [0.34139866 0.65860134]
+No lo predije correctamente :( 
+
+
+Imagen: 5392295false.png
+Probabilidades en base a las clases: [0.58931965 0.41068038]
+Predicción: es false
+
+
+Imagen: 5392349false.png
+Probabilidades en base a las clases: [0.6025513  0.39744872]
+Predicción: es false
+
+
+Imagen: 5392413false.png
+Probabilidades en base a las clases: [0.57881826 0.42118168]
+Predicción: es false
+
+
+Imagen: 5392422false.png
+Probabilidades en base a las clases: [0.48722017 0.51277983]
+No lo predije correctamente :( 
+
+
+Imagen: 5392516false.png
+Probabilidades en base a las clases: [0.7479978  0.25200212]
+Predicción: es false
+
+
+Imagen: 5392617false.png
+Probabilidades en base a las clases: [0.6278711 0.3721289]
+Predicción: es false
+
+
+Imagen: 5392636false.png
+Probabilidades en base a las clases: [0.5064319  0.49356803]
+Predicción: es false
+
+
+Imagen: 5392711false.png
+Probabilidades en base a las clases: [0.55384225 0.44615778]
+Predicción: es false
+
+
+Imagen: 5392805false.png
+Probabilidades en base a las clases: [0.4440225 0.5559775]
+No lo predije correctamente :( 
+
+
+Imagen: 5392904false.png
+Probabilidades en base a las clases: [0.56881547 0.43118456]
+Predicción: es false
+
+
+Imagen: 5393144false.png
+Probabilidades en base a las clases: [0.5350485 0.4649515]
+Predicción: es false
+
+
+Imagen: 5393207false.png
+Probabilidades en base a las clases: [0.79223675 0.20776331]
+Predicción: es false
+
+
+Imagen: 5393218false.png
+Probabilidades en base a las clases: [0.68257505 0.3174249 ]
+Predicción: es false
+
+
+Imagen: 5393230false.png
+Probabilidades en base a las clases: [0.8032291  0.19677092]
+Predicción: es false
+
+
+Imagen: 5393235false.png
+Probabilidades en base a las clases: [0.15795328 0.8420468 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5393533false.png
+Probabilidades en base a las clases: [0.623977   0.37602308]
+Predicción: es false
+
+
+Imagen: 5393633false.png
+Probabilidades en base a las clases: [0.3636081 0.6363919]
+No lo predije correctamente :( 
+
+
+Imagen: 5393665false.png
+Probabilidades en base a las clases: [0.54709333 0.45290664]
+Predicción: es false
+
+
+Imagen: 5393675false.png
+Probabilidades en base a las clases: [0.7041791 0.2958209]
+Predicción: es false
+
+
+Imagen: 5393839false.png
+Probabilidades en base a las clases: [0.65884477 0.34115526]
+Predicción: es false
+
+
+Imagen: 5393912false.png
+Probabilidades en base a las clases: [0.15298195 0.84701806]
+No lo predije correctamente :( 
+
+
+Imagen: 5393940false.png
+Probabilidades en base a las clases: [0.47180903 0.528191  ]
+No lo predije correctamente :( 
+
+
+Imagen: 5394018false.png
+Probabilidades en base a las clases: [0.3042585 0.6957415]
+No lo predije correctamente :( 
+
+
+Imagen: 5394056false.png
+Probabilidades en base a las clases: [0.891921   0.10807899]
+Predicción: es false
+
+
+Imagen: 5394107false.png
+Probabilidades en base a las clases: [0.19955283 0.80044717]
+No lo predije correctamente :( 
+
+
+Imagen: 5394167false.png
+Probabilidades en base a las clases: [0.6342787 0.3657213]
+Predicción: es false
+
+
+Imagen: 5394240false.png
+Probabilidades en base a las clases: [0.7171083  0.28289166]
+Predicción: es false
+
+
+Imagen: 5394262false.png
+Probabilidades en base a las clases: [0.5617262  0.43827382]
+Predicción: es false
+
+
+Imagen: 5394540false.png
+Probabilidades en base a las clases: [0.7624634  0.23753655]
+Predicción: es false
+
+
+Imagen: 5394687false.png
+Probabilidades en base a las clases: [0.71493244 0.2850676 ]
+Predicción: es false
+
+
+Imagen: 5394759false.png
+Probabilidades en base a las clases: [0.37127855 0.6287215 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5394896false.png
+Probabilidades en base a las clases: [0.05635868 0.9436413 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5395025false.png
+Probabilidades en base a las clases: [0.7539744 0.2460256]
+Predicción: es false
+
+
+Imagen: 5395509false.png
+Probabilidades en base a las clases: [0.9183021  0.08169792]
+Predicción: es false
+
+
+Imagen: 5395625false.png
+Probabilidades en base a las clases: [0.7939401  0.20605986]
+Predicción: es false
+
+
+Imagen: 5396457false.png
+Probabilidades en base a las clases: [0.33425924 0.6657408 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5396596false.png
+Probabilidades en base a las clases: [0.94386685 0.0561332 ]
+Predicción: es false
+
+
+Imagen: 5396597false.png
+Probabilidades en base a las clases: [0.53810835 0.46189168]
+Predicción: es false
+
+
+Imagen: 5396614false.png
+Probabilidades en base a las clases: [0.3538924 0.6461076]
+No lo predije correctamente :( 
+
+
+Imagen: 5396798false.png
+Probabilidades en base a las clases: [0.87797153 0.12202846]
+Predicción: es false
+
+
+Imagen: 5396834false.png
+Probabilidades en base a las clases: [0.91394764 0.0860524 ]
+Predicción: es false
+
+
+Imagen: 5396932false.png
+Probabilidades en base a las clases: [0.3411848 0.6588152]
+No lo predije correctamente :( 
+
+
+Imagen: 5397015false.png
+Probabilidades en base a las clases: [0.5381031 0.4618969]
+Predicción: es false
+
+
+Imagen: 5397025false.png
+Probabilidades en base a las clases: [0.49272552 0.50727445]
+No lo predije correctamente :( 
+
+
+Imagen: 5397128false.png
+Probabilidades en base a las clases: [0.1821061 0.8178939]
+No lo predije correctamente :( 
+
+
+Imagen: 5397248false.png
+Probabilidades en base a las clases: [0.25066024 0.7493398 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5397290false.png
+Probabilidades en base a las clases: [0.06553203 0.934468  ]
+No lo predije correctamente :( 
+
+
+Imagen: 5397374false.png
+Probabilidades en base a las clases: [0.3414938 0.6585062]
+No lo predije correctamente :( 
+
+
+Imagen: 5397375false.png
+Probabilidades en base a las clases: [0.18623754 0.8137624 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5397384false.png
+Probabilidades en base a las clases: [0.5810565  0.41894346]
+Predicción: es false
+
+
+Imagen: 5397460false.png
+Probabilidades en base a las clases: [0.30941552 0.6905845 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5397501false.png
+Probabilidades en base a las clases: [0.23379228 0.76620775]
+No lo predije correctamente :( 
+
+
+Imagen: 5397541false.png
+Probabilidades en base a las clases: [0.39546648 0.6045335 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5397571false.png
+Probabilidades en base a las clases: [0.3262609  0.67373914]
+No lo predije correctamente :( 
+
+
+Imagen: 5397608false.png
+Probabilidades en base a las clases: [0.16987433 0.83012563]
+No lo predije correctamente :( 
+
+
+Imagen: 5397642false.png
+Probabilidades en base a las clases: [0.2072998  0.79270023]
+No lo predije correctamente :( 
+
+
+Imagen: 5397863false.png
+Probabilidades en base a las clases: [0.73762876 0.26237124]
+Predicción: es false
+
+
+Imagen: 5397896false.png
+Probabilidades en base a las clases: [0.72402203 0.275978  ]
+Predicción: es false
+
+
+Imagen: 5398092false.png
+Probabilidades en base a las clases: [0.65160793 0.34839207]
+Predicción: es false
+
+
+Imagen: 5398096false.png
+Probabilidades en base a las clases: [0.09391044 0.90608954]
+No lo predije correctamente :( 
+
+
+Imagen: 5398312false.png
+Probabilidades en base a las clases: [0.8001561  0.19984391]
+Predicción: es false
+
+
+Imagen: 5398374false.png
+Probabilidades en base a las clases: [0.5411765  0.45882353]
+Predicción: es false
+
+
+Imagen: 5398745false.png
+Probabilidades en base a las clases: [0.73484284 0.2651572 ]
+Predicción: es false
+
+
+Imagen: 5398846false.png
+Probabilidades en base a las clases: [0.25332442 0.74667555]
+No lo predije correctamente :( 
+
+
+Imagen: 5398918false.png
+Probabilidades en base a las clases: [0.3904037 0.6095963]
+No lo predije correctamente :( 
+
+
+Imagen: 5399038false.png
+Probabilidades en base a las clases: [0.5370787 0.4629213]
+Predicción: es false
+
+
+Imagen: 5399252false.png
+Probabilidades en base a las clases: [0.6560095 0.3439905]
+Predicción: es false
+
+
+Imagen: 5399267false.png
+Probabilidades en base a las clases: [0.7279208  0.27207923]
+Predicción: es false
+
+
+Imagen: 5399326false.png
+Probabilidades en base a las clases: [0.7135754  0.28642458]
+Predicción: es false
+
+
+Imagen: 5399517false.png
+Probabilidades en base a las clases: [0.718327   0.28167304]
+Predicción: es false
+
+
+Imagen: 5399654false.png
+Probabilidades en base a las clases: [0.44705632 0.5529437 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5399951false.png
+Probabilidades en base a las clases: [0.14676183 0.8532382 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5400028false.png
+Probabilidades en base a las clases: [0.41930586 0.58069414]
+No lo predije correctamente :( 
+
+
+Imagen: 5400111false.png
+Probabilidades en base a las clases: [0.7424078  0.25759226]
+Predicción: es false
+
+
+Imagen: 5400114false.png
+Probabilidades en base a las clases: [0.4219849  0.57801515]
+No lo predije correctamente :( 
+
+
+Imagen: 5400209false.png
+Probabilidades en base a las clases: [0.3239483  0.67605174]
+No lo predije correctamente :( 
+
+
+Imagen: 5400307false.png
+Probabilidades en base a las clases: [0.32562912 0.6743709 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5400461false.png
+Probabilidades en base a las clases: [0.8180899  0.18191007]
+Predicción: es false
+
+
+Imagen: 5400648false.png
+Probabilidades en base a las clases: [0.72009856 0.27990147]
+Predicción: es false
+
+
+Imagen: 5400679false.png
+Probabilidades en base a las clases: [0.21187489 0.7881251 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5400699false.png
+Probabilidades en base a las clases: [0.818925   0.18107493]
+Predicción: es false
+
+
+Imagen: 5400756false.png
+Probabilidades en base a las clases: [0.92369384 0.07630615]
+Predicción: es false
+
+
+Imagen: 5400801false.png
+Probabilidades en base a las clases: [0.75408965 0.24591029]
+Predicción: es false
+
+
+Imagen: 5400832false.png
+Probabilidades en base a las clases: [0.56322044 0.43677956]
+Predicción: es false
+
+
+Imagen: 5401018false.png
+Probabilidades en base a las clases: [0.86083055 0.13916937]
+Predicción: es false
+
+
+Imagen: 5401218false.png
+Probabilidades en base a las clases: [0.4048179  0.59518206]
+No lo predije correctamente :( 
+
+
+Imagen: 5401835false.png
+Probabilidades en base a las clases: [0.5276791  0.47232088]
+Predicción: es false
+
+
+Imagen: 5401903false.png
+Probabilidades en base a las clases: [0.80619895 0.19380109]
+Predicción: es false
+
+
+Imagen: 5402319false.png
+Probabilidades en base a las clases: [0.26118442 0.73881555]
+No lo predije correctamente :( 
+
+
+Imagen: 5402455false.png
+Probabilidades en base a las clases: [0.86686337 0.13313663]
+Predicción: es false
+
+
+Imagen: 5402553false.png
+Probabilidades en base a las clases: [0.76799864 0.23200141]
+Predicción: es false
+
+
+Imagen: 5402593false.png
+Probabilidades en base a las clases: [0.5413444 0.4586556]
+Predicción: es false
+
+
+Imagen: 5402637false.png
+Probabilidades en base a las clases: [0.34935194 0.6506481 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5402816false.png
+Probabilidades en base a las clases: [0.90682244 0.0931776 ]
+Predicción: es false
+
+
+Imagen: 5402960false.png
+Probabilidades en base a las clases: [0.928901   0.07109898]
+Predicción: es false
+
+
+Imagen: 5403176false.png
+Probabilidades en base a las clases: [0.2232448  0.77675515]
+No lo predije correctamente :( 
+
+
+Imagen: 5403296false.png
+Probabilidades en base a las clases: [0.15891068 0.84108937]
+No lo predije correctamente :( 
+
+
+Imagen: 5403319false.png
+Probabilidades en base a las clases: [0.4518718  0.54812825]
+No lo predije correctamente :( 
+
+
+Imagen: 5403339false.png
+Probabilidades en base a las clases: [0.75333226 0.24666774]
+Predicción: es false
+
+
+Imagen: 5403477false.png
+Probabilidades en base a las clases: [0.18557754 0.8144224 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5403631false.png
+Probabilidades en base a las clases: [0.17256026 0.8274397 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5403700false.png
+Probabilidades en base a las clases: [0.77133447 0.22866552]
+Predicción: es false
+
+
+Imagen: 5403835false.png
+Probabilidades en base a las clases: [0.64126664 0.35873333]
+Predicción: es false
+
+
+Imagen: 5403962false.png
+Probabilidades en base a las clases: [0.2984951 0.7015049]
+No lo predije correctamente :( 
+
+
+Imagen: 5404204false.png
+Probabilidades en base a las clases: [0.69780886 0.3021911 ]
+Predicción: es false
+
+
+Imagen: 5404245false.png
+Probabilidades en base a las clases: [0.30785713 0.69214284]
+No lo predije correctamente :( 
+
+
+Imagen: 5404308false.png
+Probabilidades en base a las clases: [0.68129504 0.318705  ]
+Predicción: es false
+
+
+Imagen: 5404339false.png
+Probabilidades en base a las clases: [0.761599 0.238401]
+Predicción: es false
+
+
+Imagen: 5404361false.png
+Probabilidades en base a las clases: [0.321444 0.678556]
+No lo predije correctamente :( 
+
+
+Imagen: 5404375false.png
+Probabilidades en base a las clases: [0.24058644 0.75941354]
+No lo predije correctamente :( 
+
+
+Imagen: 5404459false.png
+Probabilidades en base a las clases: [0.12275609 0.8772439 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5404592false.png
+Probabilidades en base a las clases: [0.7381743  0.26182568]
+Predicción: es false
+
+
+Imagen: 5404622false.png
+Probabilidades en base a las clases: [0.4748538 0.5251461]
+No lo predije correctamente :( 
+
+
+Imagen: 5404957false.png
+Probabilidades en base a las clases: [0.8624424  0.13755764]
+Predicción: es false
+
+
+Imagen: 5405103false.png
+Probabilidades en base a las clases: [0.1794888 0.8205112]
+No lo predije correctamente :( 
+
+
+Imagen: 5405114false.png
+Probabilidades en base a las clases: [0.39691398 0.603086  ]
+No lo predije correctamente :( 
+
+
+Imagen: 5405125false.png
+Probabilidades en base a las clases: [0.2570703 0.7429297]
+No lo predije correctamente :( 
+
+
+Imagen: 5405177false.png
+Probabilidades en base a las clases: [0.71652657 0.2834734 ]
+Predicción: es false
+
+
+Imagen: 5405194false.png
+Probabilidades en base a las clases: [0.80809236 0.19190764]
+Predicción: es false
+
+
+Imagen: 5405512false.png
+Probabilidades en base a las clases: [0.62168777 0.37831232]
+Predicción: es false
+
+
+Imagen: 5405667false.png
+Probabilidades en base a las clases: [0.63684696 0.363153  ]
+Predicción: es false
+
+
+Imagen: 5405848false.png
+Probabilidades en base a las clases: [0.34580016 0.65419984]
+No lo predije correctamente :( 
+
+
+Imagen: 5405901false.png
+Probabilidades en base a las clases: [0.5817765 0.4182235]
+Predicción: es false
+
+
+Imagen: 5405911false.png
+Probabilidades en base a las clases: [0.20529903 0.7947009 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5406088false.png
+Probabilidades en base a las clases: [0.5193057  0.48069426]
+Predicción: es false
+
+
+Imagen: 5406113false.png
+Probabilidades en base a las clases: [0.08994479 0.9100552 ]
+No lo predije correctamente :( 
+
+
+Imagen: 5406226false.png
+Probabilidades en base a las clases: [0.4856695 0.5143305]
+No lo predije correctamente :( 
+
+
+Imagen: 5406241false.png
+Probabilidades en base a las clases: [0.8437187 0.1562813]
+Predicción: es false
+
+
+Imagen: 5406257false.png
+Probabilidades en base a las clases: [0.39591864 0.60408133]
+No lo predije correctamente :( 
+
+
+Imagen: 5406265false.png
+Probabilidades en base a las clases: [0.65972906 0.340271  ]
+Predicción: es false
+
+
+Cantidad: 167     Aciertos: 90    Ratio: 0.5389221556886228
+------------------------------- 
+Predicciones en base a imágenes de TRUE (Enfermos): 
+Imagen: 1.png
+Probabilidades en base a las clases: [0.12965494 0.8703451 ]
+Predicción: es true
+
+
+Imagen: 10.png
+Probabilidades en base a las clases: [0.57900697 0.42099303]
+No lo predije correctamente :( 
+
+
+Imagen: 11.png
+Probabilidades en base a las clases: [0.62302446 0.37697554]
+No lo predije correctamente :( 
+
+
+Imagen: 12.png
+Probabilidades en base a las clases: [0.16263303 0.83736694]
+Predicción: es true
+
+
+Imagen: 13.png
+Probabilidades en base a las clases: [0.13299602 0.8670039 ]
+Predicción: es true
+
+
+Imagen: 14.png
+Probabilidades en base a las clases: [0.3574641  0.64253587]
+Predicción: es true
+
+
+Imagen: 15.png
+Probabilidades en base a las clases: [0.52630544 0.47369456]
+No lo predije correctamente :( 
+
+
+Imagen: 16.png
+Probabilidades en base a las clases: [0.7015942  0.29840577]
+No lo predije correctamente :( 
+
+
+Imagen: 17.png
+Probabilidades en base a las clases: [0.30557624 0.6944238 ]
+Predicción: es true
+
+
+Imagen: 18.png
+Probabilidades en base a las clases: [0.69104254 0.30895746]
+No lo predije correctamente :( 
+
+
+Imagen: 19.png
+Probabilidades en base a las clases: [0.39760995 0.60239005]
+Predicción: es true
+
+
+Imagen: 2.png
+Probabilidades en base a las clases: [0.93943006 0.06056994]
+No lo predije correctamente :( 
+
+
+Imagen: 20.png
+Probabilidades en base a las clases: [0.718903   0.28109702]
+No lo predije correctamente :( 
+
+
+Imagen: 21.png
+Probabilidades en base a las clases: [0.7594035  0.24059655]
+No lo predije correctamente :( 
+
+
+Imagen: 22.png
+Probabilidades en base a las clases: [0.5062911 0.4937089]
+No lo predije correctamente :( 
+
+
+Imagen: 23.png
+Probabilidades en base a las clases: [0.23695141 0.7630486 ]
+Predicción: es true
+
+
+Imagen: 25.png
+Probabilidades en base a las clases: [0.8214755  0.17852451]
+No lo predije correctamente :( 
+
+
+Imagen: 26.png
+Probabilidades en base a las clases: [0.46394768 0.5360523 ]
+Predicción: es true
+
+
+Imagen: 27.png
+Probabilidades en base a las clases: [0.4926096 0.5073904]
+Predicción: es true
+
+
+Imagen: 28.png
+Probabilidades en base a las clases: [0.34478298 0.655217  ]
+Predicción: es true
+
+
+Imagen: 29.png
+Probabilidades en base a las clases: [0.6272759 0.3727241]
+No lo predije correctamente :( 
+
+
+Imagen: 3.png
+Probabilidades en base a las clases: [0.8534746 0.1465254]
+No lo predije correctamente :( 
+
+
+Imagen: 30.png
+Probabilidades en base a las clases: [0.3143604  0.68563956]
+Predicción: es true
+
+
+Imagen: 31.png
+Probabilidades en base a las clases: [0.5861886  0.41381133]
+No lo predije correctamente :( 
+
+
+Imagen: 32.png
+Probabilidades en base a las clases: [0.733838   0.26616195]
+No lo predije correctamente :( 
+
+
+Imagen: 33.png
+Probabilidades en base a las clases: [0.20265585 0.79734415]
+Predicción: es true
+
+
+Imagen: 34.png
+Probabilidades en base a las clases: [0.31587875 0.6841212 ]
+Predicción: es true
+
+
+Imagen: 35.png
+Probabilidades en base a las clases: [0.6940283  0.30597165]
+No lo predije correctamente :( 
+
+
+Imagen: 36.png
+Probabilidades en base a las clases: [0.66726536 0.33273458]
+No lo predije correctamente :( 
+
+
+Imagen: 37.png
+Probabilidades en base a las clases: [0.8368893  0.16311066]
+No lo predije correctamente :( 
+
+
+Imagen: 38.png
+Probabilidades en base a las clases: [0.8670381  0.13296194]
+No lo predije correctamente :( 
+
+
+Imagen: 39.png
+Probabilidades en base a las clases: [0.80003446 0.19996555]
+No lo predije correctamente :( 
+
+
+Imagen: 4.png
+Probabilidades en base a las clases: [0.56392163 0.43607834]
+No lo predije correctamente :( 
+
+
+Imagen: 40.png
+Probabilidades en base a las clases: [0.9241332  0.07586688]
+No lo predije correctamente :( 
+
+
+Imagen: 41.png
+Probabilidades en base a las clases: [0.7707384  0.22926164]
+No lo predije correctamente :( 
+
+
+Imagen: 42.png
+Probabilidades en base a las clases: [0.8500358  0.14996417]
+No lo predije correctamente :( 
+
+
+Imagen: 43.png
+Probabilidades en base a las clases: [0.8379923  0.16200764]
+No lo predije correctamente :( 
+
+
+Imagen: 44.png
+Probabilidades en base a las clases: [0.7391891 0.2608109]
+No lo predije correctamente :( 
+
+
+Imagen: 45.png
+Probabilidades en base a las clases: [0.7077641 0.2922359]
+No lo predije correctamente :( 
+
+
+Imagen: 46.png
+Probabilidades en base a las clases: [0.818319   0.18168102]
+No lo predije correctamente :( 
+
+
+Imagen: 47.png
+Probabilidades en base a las clases: [0.95596087 0.04403921]
+No lo predije correctamente :( 
+
+
+Imagen: 48.png
+Probabilidades en base a las clases: [0.9366881  0.06331181]
+No lo predije correctamente :( 
+
+
+Imagen: 49.png
+Probabilidades en base a las clases: [0.6765954 0.3234046]
+No lo predije correctamente :( 
+
+
+Imagen: 5.png
+Probabilidades en base a las clases: [0.73042256 0.26957747]
+No lo predije correctamente :( 
+
+
+Imagen: 50.png
+Probabilidades en base a las clases: [0.84421515 0.15578489]
+No lo predije correctamente :( 
+
+
+Imagen: 51.png
+Probabilidades en base a las clases: [0.6392992  0.36070076]
+No lo predije correctamente :( 
+
+
+Imagen: 52.png
+Probabilidades en base a las clases: [0.28479376 0.7152062 ]
+Predicción: es true
+
+
+Imagen: 53.png
+Probabilidades en base a las clases: [0.61122435 0.38877565]
+No lo predije correctamente :( 
+
+
+Imagen: 6.png
+Probabilidades en base a las clases: [0.8314015  0.16859847]
+No lo predije correctamente :( 
+
+
+Imagen: 7.png
+Probabilidades en base a las clases: [0.732798   0.26720205]
+No lo predije correctamente :( 
+
+
+Imagen: 8.png
+Probabilidades en base a las clases: [0.79637796 0.20362204]
+No lo predije correctamente :( 
+
+
+Imagen: 9.png
+Probabilidades en base a las clases: [0.52470636 0.47529355]
+No lo predije correctamente :( 
+
+
+Imagen: Hospital Rivadavia 1.png
+Probabilidades en base a las clases: [0.516095   0.48390505]
+No lo predije correctamente :( 
+
+
+Imagen: Pacente 5 - Monica.png
+Probabilidades en base a las clases: [0.19537276 0.80462724]
+Predicción: es true
+
+
+Imagen: Paciente 1.png
+Probabilidades en base a las clases: [0.6320433 0.3679567]
+No lo predije correctamente :( 
+
+
+Imagen: Paciente 3.png
+Probabilidades en base a las clases: [0.545531 0.454469]
+No lo predije correctamente :( 
+
+
+Imagen: Paciente 4.png
+Probabilidades en base a las clases: [0.45715478 0.54284525]
+Predicción: es true
+
+
+Imagen: Paciente 5.png
+Probabilidades en base a las clases: [0.23197515 0.7680248 ]
+Predicción: es true
+
+
+Imagen: Paciente 6 - Elsa-2.png
+Probabilidades en base a las clases: [0.40579125 0.5942087 ]
+Predicción: es true
+
+
+Imagen: Paciente 6 - Elsa.png
+Probabilidades en base a las clases: [0.48159012 0.5184098 ]
+Predicción: es true
+
+
+Imagen: Paciente 6.png
+Probabilidades en base a las clases: [0.3260255 0.6739745]
+Predicción: es true
+
+
+Cantidad: 61     Aciertos: 20    Ratio: 0.32786885245901637

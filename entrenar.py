@@ -39,11 +39,11 @@ batch_size = 32
 # Número de veces que se va a procesar el set de entrenamiento en cada una de las epocas
 # Los pasos están relacionados con el batch size. En general, el valor de los pasos tiene que ser 
 # el resultado de la divisón (cantImages/batch_size)
-pasos = 15
+pasos = 18
 # Al final de cada una de las epocas, se corren X pasos con el set de validación
 # Sucede lo mismo que con el numero de pasos anterior. El valor es recomendable que sea
 # el resultado de (cantImagenesValidacion/batch_size)
-pasos_validacion = 6
+pasos_validacion = 8
 
 # Número de filtros que vamos a aplicar en cada convolución. 
 # Después de cada convolución nuestra imagen quedará con más profundidad.
@@ -62,36 +62,26 @@ clases = 2
 
 # Learning rate, qué tan grandes deben ser los ajustes que realice la red neuronal
 # para acercarse a una solución óptima
-lr=0.00003
+lr=0.00003	
 
-def read_pil_image(img_path, height, width):
-	with open(img_path, 'rb') as f:
-		return np.array(Image.open(f).convert('RGB').resize((width, height)))
-
-def load_all_images(dataset_path, height, width, img_ext='png'):
-    return np.array([read_pil_image(str(p), height, width) for p in 
-                                    Path(dataset_path).rglob("*."+img_ext)]) 
+def custom_l2_regularizer(weights):
+    return tf.reduce_sum(0.02 * tf.square(weights))
 
 # Pre procesamiento de imagenes, lo que hacemos es tanto NORMALIZAR el set de datos 
 # como AUMENTAR el set (data augmentation). 
 entrenamiento_datagen = ImageDataGenerator(
 	rescale=1./255, # Hacemos que todos los píxeles estén en un rango de 0 a 1
-	width_shift_range=0.3, # Mueve la imagen hacia la izquierda o derecha
-	brightness_range=(0.5, 1.0) # Cambia el brillo d las imágenes según el rango especificado		
-	
-	
+	brightness_range=(0.3, 1.0) # Cambia el brillo d las imágenes según el rango especificado		
+		
 	#featurewise_center=True,
 	#shear_range=0.3, # Para que algunas imagenes esten inclinadas
 	#zoom_range=0.3, # Para que a algunas imagenes les haga zoom
 	#horizontal_flip=True, # Invertir horizontalmente las imagenes
+	#width_shift_range=0.3, # Mueve la imagen hacia la izquierda o derecha	
 )
-
-#entrenamiento_datagen.fit(load_all_images("./samples", altura, longitud))
 
 # Le damos las imágenes tal cual son en la validación, solo que con un rescale
 validacion_datagen = ImageDataGenerator(rescale=1./255) #featurewise_center=True)
-
-#validacion_datagen.fit(load_all_images("./samples", altura, longitud))
 
 # Procesa todas las imagenes que esten dentro de las carpetas
 imagen_entrenamiento = entrenamiento_datagen.flow_from_directory(
@@ -118,11 +108,16 @@ cnn = Sequential()
 # input_shape indica cual es la altura y longitud de las imagenes, y los canales (rgb)
 # Utilizamos relu como activacion
 cnn.add(Convolution2D(filtrosConv1, tam_filtro, padding='same', strides=1, input_shape=(altura, longitud, 3), activation='relu'))
+
 # Añadimos una layer de batch normalization para normalizar el lote de datos entre capas
+# Hay discusión sobre donde se deben poner las capas de BatchNormalization. Algunos dicen que antes de una activación. Otros dicen que después. 
+# El paper que diseñó este tipo de capas dice que deben ser usadas antes de una activación que no sea lineal (como sigmoid, tanh, etc).
+# El paper que usamos como base dice que utiliza luego de cada capa.
 cnn.add(BatchNormalization())
 
 # Agregamos otra capa de convolucion
 cnn.add(Convolution2D(filtrosConv2, tam_filtro, padding='same', strides=1, activation='relu'))
+
 cnn.add(BatchNormalization())
 # Agregamos otra capa de convolucion
 cnn.add(Convolution2D(filtrosConv3, tam_filtro, padding='same', strides=1, activation='relu'))
@@ -133,26 +128,30 @@ cnn.add(MaxPooling2D(pool_size=tamano_pool, strides=2))
 
 # Aplanamos la imagen en una dimension que contendrá toda la información
 cnn.add(Flatten())
-# Lo mandamos a una capa de 256 neuronas
+
+# Lo mandamos a una capa de 128 neuronas
 cnn.add(Dense(128, activation='relu'))
 # A la anterior capa le apagamos el 50% de las neuronas en cada paso, de manera aleatoria
 #cnn.add(Dropout(0.5))
+#cnn.add(BatchNormalization())
 # Lo mandamos a una capa de 64
 cnn.add(Dense(64, activation='relu'))
+cnn.add(BatchNormalization())
+
 # Ultima capa, con cant. neuronas = clases. Softmax nos indica la probabilidad
 # de que la imagen sea un gato, perro, gorila...
-cnn.add(Dense(clases, activation='softmax'))
+cnn.add(Dense(clases, activation='sigmoid'))
 
 # Para optimizar nuestro algoritmo. 
-# loss indica qué tan bien o qué tan mal va
+# loss es una medida de los errores que produce la red neuronal al intentar predecir la salida, es una suma de dichos errores y no un porcentaje
 # se optimiza con Adam
 # metrics con accuracy es el porcentaje de qué tan bien está aprendiendo la red neuronal
 cnn.compile(loss='categorical_crossentropy', 
-	optimizer=optimizers.Adam(lr=lr), 
+	optimizer=optimizers.Adam(lr=lr), 	
 	metrics=['accuracy'])
 
 # Entrenamos la red neuronal
-cnn.fit_generator(imagen_entrenamiento, 
+cnn.fit(imagen_entrenamiento, #Data Generator
 	steps_per_epoch=pasos,
 	epochs=epocas, 
 	validation_data=imagen_validacion, 
