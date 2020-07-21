@@ -1,5 +1,4 @@
 # Necesitamos tener instalados los packages: librosa, matplotlib
-
 import sys
 import os
 import librosa
@@ -7,62 +6,154 @@ import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 
-pathAudiosTrue = "./audios/true/"
-pathAudiosFalse = "./audios/false/"
+pathMpowerEnfermos = "./audios/audios-mpower/true/"
+pathMPowerSanos = "./audios/audios-mpower/false/"
+
+#Rutas donde se encuentran guardados los archivos de audios
+pathAudiosEnfermos = "./audios/audios-unlam/audios-letra-A/enfermos/"
+pathAudiosSanos = "./audios/audios-unlam/audios-letra-A/sanos/"
+
+#Rutas donde serán guardados los espectrogramas de entrenamiento
+pathEntrenamientoEnfermos = "./images-unlam/entrenamiento/enfermos"
+pathEntrenamientoSanos = "./images-unlam/entrenamiento/sanos"
+
+#Rutas donde serán guardados los espectrogramas de validación
+pathValidacionEnfermos = "./images-unlam/validacion/enfermos"
+pathValidacionSanos = "./images-unlam/validacion/sanos"
+
+#Ruta donde serán guardadas las imágenes de prueba
+pathTestImagesEnfermos = "./images-unlam/test-images/enfermos"
+pathTestImagesSanos = "./images-unlam/test-images/sanos"
+
+#Porcentaje asignado a entrenamiento y validación
+porcentajeEntrenamiento = 70
+porcentajeValidacion = 20
 
 def main():
+    #Crea los directorios especificados (en caso de que no existan)
+    crearDirectorios()
 
     print("1- Espectrograma audios UNLAM")
     print("2- Espectrograma audios MPOWER") 
     num = int(input("Selecciona: "))
+    ejes = input("¿Crear espectrogramas con ejes? s/n:")
 
     if (num == 1): 
-        off = 0
-        dur = 1.5
-        for audio in os.listdir("./audios/audios-unlam/true/"):
-            crearEspectrograma("./audios/audios-unlam/true/", audio, "./images-unlam/true", off, dur)
-        for audio in os.listdir("./audios/audios-unlam/false/"):
-            crearEspectrograma("./audios/audios-unlam/false/", audio, "./images-unlam/false", off, dur)
+        listaEnfermos = os.listdir(pathAudiosEnfermos)
+        listaSanos = os.listdir(pathAudiosSanos)
+
+        #Resultados de los porcentajes realizados sobre las listas
+        cantEntrenamientoEnfermos = porcentaje(len(listaEnfermos), porcentajeEntrenamiento)
+        cantValidacionEnfermos = porcentaje(len(listaEnfermos), porcentajeValidacion)
+        cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
+        cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
+
+        if (ejes == "y"):            
+            # Cada foreach crea espectrogramas con ejes dentro de las carpetas indicadas, de acuerdo a los porcentajes que se hayan definido
+            for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
+                crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
+            for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
+                crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathValidacionEnfermos)
+            for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
+                crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
+
+            for audio in listaSanos[0:cantEntrenamientoSanos]:
+                crearEspectrogramaConEjes(pathAudiosSanos, audio, pathEntrenamientoSanos)
+            for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
+                crearEspectrogramaConEjes(pathAudiosSanos, audio, pathValidacionSanos)
+            for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
+                crearEspectrogramaConEjes(pathAudiosSanos, audio, pathTestImagesSanos)
+
+        elif (ejes == "n"): 
+            for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
+                crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
+            for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
+                crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathValidacionEnfermos)
+            for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
+                crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
+
+            for audio in listaSanos[0:cantEntrenamientoSanos]:
+                crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathEntrenamientoSanos)
+            for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
+                crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathValidacionSanos)
+            for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
+                crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathTestImagesSanos)
 
     if (num == 2):
-        off = 2.5
-        dur = 2.0
-        listaFalse = os.listdir(pathAudiosFalse)
-        listaTrue = os.listdir(pathAudiosTrue)
-
-        for audio in listaFalse[1:porcentaje(len(listaFalse), 70)]:
-            crearEspectrograma(pathAudiosFalse, audio, "../data/entrenamiento/false", off, dur)
-            
-        for audio in listaFalse[porcentaje(len(listaFalse), 70):len(listaFalse)]:
-            crearEspectrograma(pathAudiosFalse, audio, "../data/validacion/false", off, dur)
-
-        for audio in listaTrue[1:porcentaje(len(listaTrue), 70)]:
-            crearEspectrograma(pathAudiosTrue, audio, "../data/entrenamiento/true", off, dur)
+        #Offset y duracion que usamos para los audios de mPower
+        #off = 2.5
+        #dur = 2.0
         
-        for audio in listaTrue[porcentaje(len(listaTrue), 70):len(listaTrue)]:
-            crearEspectrograma(pathAudiosTrue, audio, "../data/validacion/true", off, dur)
+        listaEnfermos = os.listdir(pathMpowerEnfermos)
+        listaSanos = os.listdir(pathMPowerSanos)
+
+        cantEntrenamientoEnfermos = porcentaje(len(listaEnfermos), porcentajeEntrenamiento)
+        cantValidacionEnfermos = porcentaje(len(listaEnfermos), porcentajeValidacion)
+        cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
+        cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
+
+        if (ejes == "y"): 
+            for audio in listaEnfermos[1:porcentaje(len(listaEnfermos), 70)]:
+                crearEspectrogramaConEjes(pathMpowerEnfermos, audio, "../data/entrenamiento/false", off, dur)
+                
+            for audio in listaEnfermos[porcentaje(len(listaEnfermos), 70):len(listaEnfermos)]:
+                crearEspectrogramaConEjes(pathMpowerEnfermos, audio, "../data/validacion/false", off, dur)
+
+            for audio in listaSanos[1:porcentaje(len(listaSanos), 70)]:
+                crearEspectrogramaConEjes(pathMPowerSanos, audio, "../data/entrenamiento/true", off, dur)
+            
+            for audio in listaSanos[porcentaje(len(listaSanos), 70):len(listaSanos)]:
+                crearEspectrogramaConEjes(pathMPowerSanos, audio, "../data/validacion/true", off, dur)
+
+
+        elif (ejes == "n"): 
+            for audio in listaEnfermos[1:porcentaje(len(listaEnfermos), 70)]:
+                crearEspectrogramaSinEjes(pathMpowerEnfermos, audio, "../data/entrenamiento/false", off, dur)
+                
+            for audio in listaEnfermos[porcentaje(len(listaEnfermos), 70):len(listaEnfermos)]:
+                crearEspectrogramaSinEjes(pathMpowerEnfermos, audio, "../data/validacion/false", off, dur)
+
+            for audio in listaSanos[1:porcentaje(len(listaSanos), 70)]:
+                crearEspectrogramaSinEjes(pathMPowerSanos, audio, "../data/entrenamiento/true", off, dur)
+            
+            for audio in listaSanos[porcentaje(len(listaSanos), 70):len(listaSanos)]:
+                crearEspectrogramaSinEjes(pathMPowerSanos, audio, "../data/validacion/true", off, dur)
 
     print("Todos los espectrogramas fueron creados")
 
 def porcentaje(num, porciento):   
     return int((num*porciento)/100) 
 
-def crearEspectrograma(path, file, carpetaDestino, off, dur):
+def crearDirectorios():    
+    if not os.path.exists(pathEntrenamientoEnfermos):
+	    os.makedirs(pathEntrenamientoEnfermos)
+
+    if not os.path.exists(pathEntrenamientoSanos):
+	    os.makedirs(pathEntrenamientoSanos)
+    
+    if not os.path.exists(pathValidacionEnfermos):
+	    os.makedirs(pathValidacionEnfermos)
+    
+    if not os.path.exists(pathValidacionSanos):
+	    os.makedirs(pathValidacionSanos)
+
+    if not os.path.exists(pathTestImagesEnfermos):
+	    os.makedirs(pathTestImagesEnfermos)    
+    
+    if not os.path.exists(pathTestImagesSanos):
+	    os.makedirs(pathTestImagesSanos)     
+
+def crearEspectrogramaConEjes(path, file, carpetaDestino, off=0.0, dur=None):
     # Obtenemos el nombre dl archivo sin extension
-    filename = os.path.splitext(os.path.basename(file))[0]
+    #filename = os.path.splitext(os.path.basename(file))[0]
 
     try: 
         # offset: cuantos segundos nos desplazamos desde el archivo original (float)
         # duration: cuantos segundos de audio leemos (float)
-        #
-        # Algunos audios tienen "problemas" al inicio y al final (los pacientes no dicen A instantáneamente, hay rudios, etc), por eso
-        # es que aplicamos un offset y acortamos cuántos segundos de audio leemos, para reducir la mayor cantidad de ruidos y problemas
-
-        # Además, se nos dijo que los pacientes recién comienzan a presentar "vibraciones" en la voz luego de unos segundos, así que este cambio
-        # nos ayuda a centrarnos justamente donde la voz empieza a "vibrar"
+        # Podemos utilizar el offset y la duracion para evitar los problemas que hayan en el audio grabado.
         y, sr = librosa.load(path + file, offset=off, duration=dur)
 
-        # Librosa utiliza una STFT (Transformación de Fourier de Tiempo Reducido) para realizar los espectrogramas.La STFT utiliza una "ventana de tiempo".
+        # Librosa utiliza una STFT para realizar los espectrogramas. La STFT utiliza una "ventana de tiempo".
         # 
         # Las ventanas de tiempo son muy importantes e influyen en el resultado del espectrograma, debido a que uno de los problemas que tiene STFT es que, dependiendo del tamaño de la ventana,
         # puede perder resolución de frecuencia, o resolución de tiempo.
@@ -81,17 +172,37 @@ def crearEspectrograma(path, file, carpetaDestino, off, dur):
         # para análisis de voz, se recomienda utilizar n_ftt = 512 (lo que da una window lenght de 23ms, similar a la que usaron en el paper)
         # win_length es para dividir cada trama del audio en ventanas, si no se indica este parámetro por defecto es igual a n_ftt
         spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=512)
-        # Removemos los bordes del espectrograma y ajustamos su tamaño en pixeles (figsize)
-        fig, ax = plt.subplots(1, figsize=(3,3))
-        fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
-        # Removemos los ejes del espectrograma
-        ax.axis('off')
-        #Power_to_db convierte un espectrograma a unidades de decibeles
-        #fmax es un parámetro para definir cuál es la frecuencia máxima
-        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
+        plt.figure(figsize=(6,4))
+        
+        # Power_to_db convierte un espectrograma a unidades de decibeles
+        # fmax es un parámetro para definir cuál es la frecuencia máxima
+        #librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
+        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), x_axis='time', y_axis='mel', fmax=8000)
+        plt.colorbar(format='%+2.0f dB')
+        
         # Guardamos la imagen en el directorio
-        plt.savefig(carpetaDestino + '/' + filename + '.png')
+        plt.savefig(carpetaDestino + '/' + file[:-4] + '.png')
         plt.close()
     except Exception as e: 
         print(e)
+
+def crearEspectrogramaSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
+    try: 
+        y, sr = librosa.load(path + file, offset=off, duration=dur)
+        spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=512)
+
+        # Removemos los bordes del espectrograma y ajustamos su tamaño en pixeles (figsize)
+        fig, ax = plt.subplots(1, figsize=(6,4))
+        fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
+        # Removemos los ejes del espectrograma
+        ax.axis('off')
+
+        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
+        
+        # Guardamos la imagen en el directorio
+        plt.savefig(carpetaDestino + '/' + file[:-4] + '.png')
+        plt.close()
+    except Exception as e: 
+        print(e)
+
 main()

@@ -1,5 +1,4 @@
 # Necesitamos los packages: tensorflow, pillow, SciPy
-
 import sys
 import os
 
@@ -63,9 +62,6 @@ clases = 2
 # Learning rate, qué tan grandes deben ser los ajustes que realice la red neuronal
 # para acercarse a una solución óptima
 lr=0.00003	
-
-def custom_l2_regularizer(weights):
-    return tf.reduce_sum(0.02 * tf.square(weights))
 
 # Pre procesamiento de imagenes, lo que hacemos es tanto NORMALIZAR el set de datos 
 # como AUMENTAR el set (data augmentation). 

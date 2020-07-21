@@ -2,8 +2,7 @@ data
 modelo
 test-images
 espectrograma/audios
-espectrograma/audios-dudosos
-espectrograma/images
+espectrograma/images-mpower
 espectrograma/images-unlam
 samples
 old.data

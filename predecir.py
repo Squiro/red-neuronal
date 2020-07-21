@@ -68,18 +68,18 @@ def predecir(imagepath, imagename):
     return answer
 
 def main(): 
-    pathFalse="./test-images/false/"
-    classIndexFalse=0
-    pathTrue="./test-images/true/"
-    classIndexTrue=1
+    pathSanos="./test-images/sanos/"
+    classIndexSanos=0
+    pathEnfermos="./test-images/true/"
+    classIndexEnfermos=1
 
     preddicionesTxt.write("------------------------------- \n")
-    preddicionesTxt.write("Predicciones en base a imágenes de FALSE (Sanos): \n")
-    predecirClases(classIndexFalse, "false", pathFalse)
+    preddicionesTxt.write("Predicciones en base a imágenes de (Sanos): \n")
+    predecirClases(classIndexSanos, "false", pathSanos)
 
     preddicionesTxt.write("------------------------------- \n")
-    preddicionesTxt.write("Predicciones en base a imágenes de TRUE (Enfermos): \n")
-    predecirClases(classIndexTrue, "true", pathTrue)
+    preddicionesTxt.write("Predicciones en base a imágenes de (Enfermos): \n")
+    predecirClases(classIndexEnfermos, "true", pathEnfermos)
 
 def predecirClases(classIndex, className, path): 
     cantImg=0
