@@ -52,7 +52,7 @@ def main():
     cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
     cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
 
-    if (ejes == "y"):            
+    if (ejes == "s"):            
         # Cada foreach crea espectrogramas con ejes dentro de las carpetas indicadas, de acuerdo a los porcentajes que se hayan definido
         for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
             crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
