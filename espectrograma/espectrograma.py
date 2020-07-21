@@ -29,95 +29,59 @@ pathTestImagesSanos = "./images-unlam/test-images/sanos"
 porcentajeEntrenamiento = 70
 porcentajeValidacion = 20
 
+#Offset y duracion que usamos para los audios de mPower
+#Si se van a crear esos espectrogramas, deberiamos enviar dichos parametros a las funciones
+# off = 2.5
+# dur = 2.0
+
 def main():
     #Crea los directorios especificados (en caso de que no existan)
     crearDirectorios()
 
-    print("1- Espectrograma audios UNLAM")
-    print("2- Espectrograma audios MPOWER") 
-    num = int(input("Selecciona: "))
+    #print("1- Espectrograma audios UNLAM")
+    #print("2- Espectrograma audios MPOWER") 
+    #num = int(input("Selecciona: "))
     ejes = input("¿Crear espectrogramas con ejes? s/n:")
 
-    if (num == 1): 
-        listaEnfermos = os.listdir(pathAudiosEnfermos)
-        listaSanos = os.listdir(pathAudiosSanos)
+    listaEnfermos = os.listdir(pathAudiosEnfermos)
+    listaSanos = os.listdir(pathAudiosSanos)
 
-        #Resultados de los porcentajes realizados sobre las listas
-        cantEntrenamientoEnfermos = porcentaje(len(listaEnfermos), porcentajeEntrenamiento)
-        cantValidacionEnfermos = porcentaje(len(listaEnfermos), porcentajeValidacion)
-        cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
-        cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
+    #Resultados de los porcentajes realizados sobre las listas
+    cantEntrenamientoEnfermos = porcentaje(len(listaEnfermos), porcentajeEntrenamiento)
+    cantValidacionEnfermos = porcentaje(len(listaEnfermos), porcentajeValidacion)
+    cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
+    cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
 
-        if (ejes == "y"):            
-            # Cada foreach crea espectrogramas con ejes dentro de las carpetas indicadas, de acuerdo a los porcentajes que se hayan definido
-            for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
-                crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
-            for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
-                crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathValidacionEnfermos)
-            for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
-                crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
+    if (ejes == "y"):            
+        # Cada foreach crea espectrogramas con ejes dentro de las carpetas indicadas, de acuerdo a los porcentajes que se hayan definido
+        for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
+            crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
+        for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
+            crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathValidacionEnfermos)
+        for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
+            crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
 
-            for audio in listaSanos[0:cantEntrenamientoSanos]:
-                crearEspectrogramaConEjes(pathAudiosSanos, audio, pathEntrenamientoSanos)
-            for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
-                crearEspectrogramaConEjes(pathAudiosSanos, audio, pathValidacionSanos)
-            for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
-                crearEspectrogramaConEjes(pathAudiosSanos, audio, pathTestImagesSanos)
+        for audio in listaSanos[0:cantEntrenamientoSanos]:
+            crearEspectrogramaConEjes(pathAudiosSanos, audio, pathEntrenamientoSanos)
+        for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
+            crearEspectrogramaConEjes(pathAudiosSanos, audio, pathValidacionSanos)
+        for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
+            crearEspectrogramaConEjes(pathAudiosSanos, audio, pathTestImagesSanos)
 
-        elif (ejes == "n"): 
-            for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
-                crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
-            for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
-                crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathValidacionEnfermos)
-            for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
-                crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
+    elif (ejes == "n"): 
+        for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
+            crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
+        for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
+            crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathValidacionEnfermos)
+        for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
+            crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
 
-            for audio in listaSanos[0:cantEntrenamientoSanos]:
-                crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathEntrenamientoSanos)
-            for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
-                crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathValidacionSanos)
-            for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
-                crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathTestImagesSanos)
-
-    if (num == 2):
-        #Offset y duracion que usamos para los audios de mPower
-        #off = 2.5
-        #dur = 2.0
-        
-        listaEnfermos = os.listdir(pathMpowerEnfermos)
-        listaSanos = os.listdir(pathMPowerSanos)
-
-        cantEntrenamientoEnfermos = porcentaje(len(listaEnfermos), porcentajeEntrenamiento)
-        cantValidacionEnfermos = porcentaje(len(listaEnfermos), porcentajeValidacion)
-        cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
-        cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
-
-        if (ejes == "y"): 
-            for audio in listaEnfermos[1:porcentaje(len(listaEnfermos), 70)]:
-                crearEspectrogramaConEjes(pathMpowerEnfermos, audio, "../data/entrenamiento/false", off, dur)
-                
-            for audio in listaEnfermos[porcentaje(len(listaEnfermos), 70):len(listaEnfermos)]:
-                crearEspectrogramaConEjes(pathMpowerEnfermos, audio, "../data/validacion/false", off, dur)
-
-            for audio in listaSanos[1:porcentaje(len(listaSanos), 70)]:
-                crearEspectrogramaConEjes(pathMPowerSanos, audio, "../data/entrenamiento/true", off, dur)
-            
-            for audio in listaSanos[porcentaje(len(listaSanos), 70):len(listaSanos)]:
-                crearEspectrogramaConEjes(pathMPowerSanos, audio, "../data/validacion/true", off, dur)
-
-
-        elif (ejes == "n"): 
-            for audio in listaEnfermos[1:porcentaje(len(listaEnfermos), 70)]:
-                crearEspectrogramaSinEjes(pathMpowerEnfermos, audio, "../data/entrenamiento/false", off, dur)
-                
-            for audio in listaEnfermos[porcentaje(len(listaEnfermos), 70):len(listaEnfermos)]:
-                crearEspectrogramaSinEjes(pathMpowerEnfermos, audio, "../data/validacion/false", off, dur)
-
-            for audio in listaSanos[1:porcentaje(len(listaSanos), 70)]:
-                crearEspectrogramaSinEjes(pathMPowerSanos, audio, "../data/entrenamiento/true", off, dur)
-            
-            for audio in listaSanos[porcentaje(len(listaSanos), 70):len(listaSanos)]:
-                crearEspectrogramaSinEjes(pathMPowerSanos, audio, "../data/validacion/true", off, dur)
+        for audio in listaSanos[0:cantEntrenamientoSanos]:
+            crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathEntrenamientoSanos)
+        for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
+            crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathValidacionSanos)
+        for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
+            crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathTestImagesSanos)      
 
     print("Todos los espectrogramas fueron creados")
 
