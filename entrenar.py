@@ -38,11 +38,11 @@ batch_size = 32
 # Número de veces que se va a procesar el set de entrenamiento en cada una de las epocas
 # Los pasos están relacionados con el batch size. En general, el valor de los pasos tiene que ser 
 # el resultado de la divisón (cantImages/batch_size)
-pasos = 18
+pasos = 4
 # Al final de cada una de las epocas, se corren X pasos con el set de validación
 # Sucede lo mismo que con el numero de pasos anterior. El valor es recomendable que sea
 # el resultado de (cantImagenesValidacion/batch_size)
-pasos_validacion = 8
+pasos_validacion = 2
 
 # Número de filtros que vamos a aplicar en cada convolución. 
 # Después de cada convolución nuestra imagen quedará con más profundidad.

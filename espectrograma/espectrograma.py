@@ -38,50 +38,18 @@ def main():
     #Crea los directorios especificados (en caso de que no existan)
     crearDirectorios()
 
-    #print("1- Espectrograma audios UNLAM")
-    #print("2- Espectrograma audios MPOWER") 
-    #num = int(input("Selecciona: "))
-    ejes = input("¿Crear espectrogramas con ejes? s/n:")
+    print("Elija el tipo de gráfico a crear")
+    print("1- Espectrograma con ejes")
+    print("2- Espectrograma sin ejes")
+    print("3- MFCC (Coeficientes Cepstrales) sin ejes") 
+    num = int(input("Selecciona: "))
 
-    listaEnfermos = os.listdir(pathAudiosEnfermos)
-    listaSanos = os.listdir(pathAudiosSanos)
-
-    #Resultados de los porcentajes realizados sobre las listas
-    cantEntrenamientoEnfermos = porcentaje(len(listaEnfermos), porcentajeEntrenamiento)
-    cantValidacionEnfermos = porcentaje(len(listaEnfermos), porcentajeValidacion)
-    cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
-    cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
-
-    if (ejes == "s"):            
-        # Cada foreach crea espectrogramas con ejes dentro de las carpetas indicadas, de acuerdo a los porcentajes que se hayan definido
-        for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
-            crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
-        for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
-            crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathValidacionEnfermos)
-        for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
-            crearEspectrogramaConEjes(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
-
-        for audio in listaSanos[0:cantEntrenamientoSanos]:
-            crearEspectrogramaConEjes(pathAudiosSanos, audio, pathEntrenamientoSanos)
-        for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
-            crearEspectrogramaConEjes(pathAudiosSanos, audio, pathValidacionSanos)
-        for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
-            crearEspectrogramaConEjes(pathAudiosSanos, audio, pathTestImagesSanos)
-
-    elif (ejes == "n"): 
-        for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
-            crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
-        for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
-            crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathValidacionEnfermos)
-        for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
-            crearEspectrogramaSinEjes(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
-
-        for audio in listaSanos[0:cantEntrenamientoSanos]:
-            crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathEntrenamientoSanos)
-        for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
-            crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathValidacionSanos)
-        for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
-            crearEspectrogramaSinEjes(pathAudiosSanos, audio, pathTestImagesSanos)      
+    if (num == 1): 
+        recorrerAudios(crearEspectrogramaConEjes)
+    elif (num == 2):
+        recorrerAudios(crearEspectrogramaSinEjes)
+    elif (num == 3):
+        recorrerAudios(crearMFCCSinEjes)         
 
     print("Todos los espectrogramas fueron creados")
 
@@ -106,6 +74,46 @@ def crearDirectorios():
     
     if not os.path.exists(pathTestImagesSanos):
 	    os.makedirs(pathTestImagesSanos)     
+
+
+def recorrerAudios(metodoAEjecutar):
+    listaEnfermos = os.listdir(pathAudiosEnfermos)
+    listaSanos = os.listdir(pathAudiosSanos)
+
+    #Resultados de los porcentajes realizados sobre las listas
+    cantEntrenamientoEnfermos = porcentaje(len(listaEnfermos), porcentajeEntrenamiento)
+    cantValidacionEnfermos = porcentaje(len(listaEnfermos), porcentajeValidacion)
+    cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
+    cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
+
+    # Cada foreach crea espectrogramas con ejes dentro de las carpetas indicadas, de acuerdo a los porcentajes que se hayan definido
+    for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
+        metodoAEjecutar(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos)
+    for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
+        metodoAEjecutar(pathAudiosEnfermos, audio, pathValidacionEnfermos)
+    for audio in listaEnfermos[cantEntrenamientoEnfermos+cantValidacionEnfermos:len(listaEnfermos)]:
+        metodoAEjecutar(pathAudiosEnfermos, audio, pathTestImagesEnfermos)
+
+    for audio in listaSanos[0:cantEntrenamientoSanos]:
+        metodoAEjecutar(pathAudiosSanos, audio, pathEntrenamientoSanos)
+    for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
+        metodoAEjecutar(pathAudiosSanos, audio, pathValidacionSanos)
+    for audio in listaSanos[cantEntrenamientoSanos+cantValidacionSanos:len(listaSanos)]:
+        metodoAEjecutar(pathAudiosSanos, audio, pathTestImagesSanos)   
+    
+def crearMFCCSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
+    try: 
+        y, sr = librosa.load(path + file, offset=off, duration=dur)
+        mfcc = librosa.feature.mfcc(y=y, sr=sr)        
+        plt.figure(figsize=(6,4))
+        librosa.display.specshow(mfcc)
+        #plt.colorbar()
+        #plt.title
+        plt.savefig(carpetaDestino + '/' + file[:-4] + '.png')
+        plt.close()
+    except Exception as e:
+        print(e)
+
 
 def crearEspectrogramaConEjes(path, file, carpetaDestino, off=0.0, dur=None):
     # Obtenemos el nombre dl archivo sin extension
