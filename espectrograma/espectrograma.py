@@ -41,7 +41,9 @@ def main():
     print("Elija el tipo de gráfico a crear")
     print("1- Espectrograma con ejes")
     print("2- Espectrograma sin ejes")
-    print("3- MFCC (Coeficientes Cepstrales) sin ejes") 
+    print("3- MFCC (Coeficientes Cepstrales) con ejes") 
+    print("4- MFCC (Coeficientes Cepstrales) sin ejes") 
+    
     num = int(input("Selecciona: "))
 
     if (num == 1): 
@@ -49,7 +51,9 @@ def main():
     elif (num == 2):
         recorrerAudios(crearEspectrogramaSinEjes)
     elif (num == 3):
-        recorrerAudios(crearMFCCSinEjes)         
+        recorrerAudios(crearMFCCConEjes)
+    elif (num == 4):
+        recorrerAudios(crearMFCCSinEjes)  
 
     print("Todos los espectrogramas fueron creados")
 
@@ -104,21 +108,25 @@ def recorrerAudios(metodoAEjecutar):
 def crearMFCCSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
     try: 
         y, sr = librosa.load(path + file, offset=off, duration=dur)
-        mfcc = librosa.feature.mfcc(y=y, sr=sr)        
-        plt.figure(figsize=(6,4))
-        librosa.display.specshow(mfcc)
-        #plt.colorbar()
-        #plt.title
-        plt.savefig(carpetaDestino + '/' + file[:-4] + '.png')
-        plt.close()
+        mfcc = librosa.feature.mfcc(y=y, sr=sr)             
+        removerEjes()
+        librosa.display.specshow(mfcc)       
+        guardarGrafico(carpetaDestino, file)
     except Exception as e:
         print(e)
 
+def crearMFCCConEjes(path, file, carpetaDestino, off=0.0, dur=None):
+    try: 
+        y, sr = librosa.load(path + file, offset=off, duration=dur)
+        mfcc = librosa.feature.mfcc(y=y, sr=sr)             
+        plt.figure(figsize=(6,4))
+        librosa.display.specshow(mfcc, x_axis='time')     
+        plt.colorbar()  
+        guardarGrafico(carpetaDestino, file)
+    except Exception as e:
+        print(e)
 
 def crearEspectrogramaConEjes(path, file, carpetaDestino, off=0.0, dur=None):
-    # Obtenemos el nombre dl archivo sin extension
-    #filename = os.path.splitext(os.path.basename(file))[0]
-
     try: 
         # offset: cuantos segundos nos desplazamos desde el archivo original (float)
         # duration: cuantos segundos de audio leemos (float)
@@ -150,11 +158,8 @@ def crearEspectrogramaConEjes(path, file, carpetaDestino, off=0.0, dur=None):
         # fmax es un parámetro para definir cuál es la frecuencia máxima
         #librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
         librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), x_axis='time', y_axis='mel', fmax=8000)
-        plt.colorbar(format='%+2.0f dB')
-        
-        # Guardamos la imagen en el directorio
-        plt.savefig(carpetaDestino + '/' + file[:-4] + '.png')
-        plt.close()
+        plt.colorbar(format='%+2.0f dB')        
+        guardarGrafico(carpetaDestino, file)
     except Exception as e: 
         print(e)
 
@@ -162,19 +167,25 @@ def crearEspectrogramaSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
     try: 
         y, sr = librosa.load(path + file, offset=off, duration=dur)
         spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=512)
-
-        # Removemos los bordes del espectrograma y ajustamos su tamaño en pixeles (figsize)
-        fig, ax = plt.subplots(1, figsize=(6,4))
-        fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
-        # Removemos los ejes del espectrograma
-        ax.axis('off')
-
-        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
-        
-        # Guardamos la imagen en el directorio
-        plt.savefig(carpetaDestino + '/' + file[:-4] + '.png')
-        plt.close()
+        removerEjes()
+        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)        
+        guardarGrafico(carpetaDestino, file)
     except Exception as e: 
         print(e)
+
+#def cargarArchivo(path, file, off, dur):
+#    return librosa.load(path + file, offset=off, duration=dur)
+
+def removerEjes():
+    # Removemos los bordes del espectrograma y ajustamos su tamaño (figsize)
+    fig, ax = plt.subplots(1, figsize=(6,4))
+    fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
+    # Removemos los ejes del espectrograma
+    ax.axis('off')
+
+def guardarGrafico(carpetaDestino, file): 
+    # Guardamos la imagen en el directorio
+    plt.savefig(carpetaDestino + '/' + file[:-4] + '.png')
+    plt.close()
 
 main()
