@@ -79,7 +79,6 @@ def crearDirectorios():
     if not os.path.exists(pathTestImagesSanos):
 	    os.makedirs(pathTestImagesSanos)     
 
-
 def recorrerAudios(metodoAEjecutar):
     listaEnfermos = os.listdir(pathAudiosEnfermos)
     listaSanos = os.listdir(pathAudiosSanos)
@@ -172,6 +171,9 @@ def crearEspectrogramaSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
         guardarGrafico(carpetaDestino, file)
     except Exception as e: 
         print(e)
+
+#def crearEspectrogramaDelta():
+
 
 #def cargarArchivo(path, file, off, dur):
 #    return librosa.load(path + file, offset=off, duration=dur)

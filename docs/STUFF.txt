@@ -28,3 +28,13 @@ https://towardsdatascience.com/whats-wrong-with-spectrograms-and-cnns-for-audio-
 
 Can convolution extract useful features from a spectrogram of seismic measurements?
 https://www.kaggle.com/michael422/spectrogram-convolution
+
+---
+
+delta stack:
+https://gist.github.com/stevemclaugh/80f192130852353ad53e6d8b6b275983
+mffc tutorial:
+http://practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/
+
+what is loss? 
+https://www.youtube.com/watch?v=Skc8nqJirJg

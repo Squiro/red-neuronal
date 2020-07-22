@@ -5,6 +5,8 @@ import os
 import numpy as np
 from pathlib import Path
 from PIL import Image
+import matplotlib.pyplot as plt
+from datetime import datetime
 
 # Importamos tensorflow
 import tensorflow as tf
@@ -23,11 +25,18 @@ from tensorflow.keras import backend as K
 # Empezamos un entrenamiento desde 0
 K.clear_session()
 
-# Path al directorio de entrenamiento y validacion
+# Rutas y directorios
+
+# Ruta donde se almacenará el modelo
+pathModelo = './modelo/'
+# Ruta donde se guardarán los gráficos de cada entrenamiento
+pathGraficos = './graficos/'
+
+# Ruta al directorio de entrenamiento y validacion
 data_entrenamiento = './data/entrenamiento'
 data_validacion = './data/validacion'
 
-# Parametros de la red neuronal
+# --- Parametros de la red neuronal ---
 
 # Numero de veces que vamos a iterar sobre el set de datos durante el entrenamiento
 epocas = 30
@@ -113,8 +122,8 @@ cnn.add(BatchNormalization())
 
 # Agregamos otra capa de convolucion
 cnn.add(Convolution2D(filtrosConv2, tam_filtro, padding='same', strides=1, activation='relu'))
-
 cnn.add(BatchNormalization())
+
 # Agregamos otra capa de convolucion
 cnn.add(Convolution2D(filtrosConv3, tam_filtro, padding='same', strides=1, activation='relu'))
 cnn.add(BatchNormalization())
@@ -134,7 +143,7 @@ cnn.add(Dense(128, activation='relu'))
 cnn.add(Dense(64, activation='relu'))
 cnn.add(BatchNormalization())
 
-# Ultima capa, con cant. neuronas = clases. Softmax nos indica la probabilidad
+# Ultima capa, con cant. neuronas = clases. Sigmoid puede usarse para indicar la probabilidad
 # de que la imagen sea un gato, perro, gorila...
 cnn.add(Dense(clases, activation='sigmoid'))
 
@@ -147,19 +156,42 @@ cnn.compile(loss='categorical_crossentropy',
 	metrics=['accuracy'])
 
 # Entrenamos la red neuronal
-cnn.fit(imagen_entrenamiento, #Data Generator
+# model.fit retorna un History callback, que a su vez tiene un atributo history conteniendo métricas de pérdidas y precisión, etc
+history = cnn.fit(imagen_entrenamiento, #Data Generator
 	steps_per_epoch=pasos,
 	epochs=epocas, 
 	validation_data=imagen_validacion, 
 	validation_steps=pasos_validacion)
 
+# Creamos una carpeta donde vamos a guardar los graficos de esta sesion
+carpetaGraficos = pathGraficos + str(datetime.today().strftime('%d-%m-%Y-%Hh%Mm%Ss'))
+os.mkdir(carpetaGraficos)
+
+# Graficamos la métrica accuracy en funcion de las epocas, tanto en train como en validation 
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'validation'], loc='upper left')
+plt.savefig(carpetaGraficos + "/accuracy" + '.png')
+#plt.show()
+
+plt.clf()
+# Graficamos la métrica loss en funcion de las epocas, tanto en train como en validation 
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'validation'], loc='upper left')
+#plt.show()
+plt.savefig(carpetaGraficos + "/loss" + '.png')
+
 # Guardamos nuestro modelo en un archivo para no tener que volver a entrenarlo cada vez
 # que querramos hacer una prediccion
+if not os.path.exists(pathModelo):
+	os.mkdir(pathModelo)
 
-dir='./modelo/'
-
-if not os.path.exists(dir):
-	os.mkdir(dir)
-
-cnn.save('./modelo/modelo.h5')
-cnn.save_weights('./modelo/pesos.h5')
+cnn.save(pathModelo + 'modelo.h5')
+cnn.save_weights(pathModelo + 'pesos.h5')
