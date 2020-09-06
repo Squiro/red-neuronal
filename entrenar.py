@@ -30,7 +30,7 @@ K.clear_session()
 # Ruta donde se almacenará el modelo
 pathModelo = './modelo/'
 # Ruta donde se guardarán los gráficos de cada entrenamiento
-pathGraficos = './graficos/'
+pathGraficos = '.logs/graficos/'
 
 # Ruta al directorio de entrenamiento y validacion
 data_entrenamiento = './data/entrenamiento'

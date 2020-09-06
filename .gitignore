@@ -4,6 +4,5 @@ test-images
 espectrograma/audios
 espectrograma/images-mpower
 espectrograma/images-unlam
-graficos
-samples
-old.data
+logs
+trash
