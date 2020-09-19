@@ -109,7 +109,7 @@ def crearMFCCSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
         y, sr = librosa.load(path + file, offset=off, duration=dur)
         mfcc = librosa.feature.mfcc(y=y, sr=sr)             
         removerEjes()
-        librosa.display.specshow(mfcc)       
+        librosa.display.specshow(mfcc, cmap='gray_r')       
         guardarGrafico(carpetaDestino, file)
     except Exception as e:
         print(e)
@@ -119,7 +119,7 @@ def crearMFCCConEjes(path, file, carpetaDestino, off=0.0, dur=None):
         y, sr = librosa.load(path + file, offset=off, duration=dur)
         mfcc = librosa.feature.mfcc(y=y, sr=sr)             
         plt.figure(figsize=(6,4))
-        librosa.display.specshow(mfcc, x_axis='time')     
+        librosa.display.specshow(mfcc, x_axis='time', cmap='gray_r')     
         plt.colorbar()  
         guardarGrafico(carpetaDestino, file)
     except Exception as e:
@@ -156,7 +156,7 @@ def crearEspectrogramaConEjes(path, file, carpetaDestino, off=0.0, dur=None):
         # Power_to_db convierte un espectrograma a unidades de decibeles
         # fmax es un parámetro para definir cuál es la frecuencia máxima
         #librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
-        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), x_axis='time', y_axis='mel', fmax=8000)
+        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), x_axis='time', y_axis='mel', fmax=8000, cmap='gray_r')
         plt.colorbar(format='%+2.0f dB')        
         guardarGrafico(carpetaDestino, file)
     except Exception as e: 
@@ -167,7 +167,7 @@ def crearEspectrogramaSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
         y, sr = librosa.load(path + file, offset=off, duration=dur)
         spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=512)
         removerEjes()
-        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)        
+        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000, cmap='gray_r')        
         guardarGrafico(carpetaDestino, file)
     except Exception as e: 
         print(e)
