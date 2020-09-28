@@ -74,7 +74,9 @@ def recorrerAudios():
 
     # ENTRENAMIENTO
     for audio in listaEnfermos[0:cantEntrenamientoEnfermos]:
-        spectrogram(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos, True)
+        spectrogram(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos, False)
+        spectrogram(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos, True, "pre1")
+        spectrogram(pathAudiosEnfermos, audio, pathEntrenamientoEnfermos, True, "pre2")
 
     # VALIDACION
     for audio in listaEnfermos[cantEntrenamientoEnfermos:cantEntrenamientoEnfermos+cantValidacionEnfermos]:
@@ -86,7 +88,9 @@ def recorrerAudios():
 
     # ENTRENAMIENTO
     for audio in listaSanos[0:cantEntrenamientoSanos]:
-        spectrogram(pathAudiosSanos, audio, pathEntrenamientoSanos, True)
+        spectrogram(pathAudiosSanos, audio, pathEntrenamientoSanos, False)
+        spectrogram(pathAudiosSanos, audio, pathEntrenamientoSanos, True, "pre1")
+        spectrogram(pathAudiosSanos, audio, pathEntrenamientoSanos, True, "pre2")
 
     # VALIDACION
     for audio in listaSanos[cantEntrenamientoSanos:cantEntrenamientoSanos+cantValidacionSanos]:
@@ -135,23 +139,24 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     y = lfilter(b, a, data)
     return y
 
-def spectrogram(path, file, carpetaDestino, preprocess):
+def spectrogram(path, file, carpetaDestino, preprocess, preFileName=""):
     data, sr = loadAudioFile(path, file)
     
     if (preprocess):
         data = randomSignalRoll(data)
 
         fs = sr # Sample rate
-        lowcut = np.random.randint(0, 4000)
-        highcut = np.random.randint(4000, 8000)
+        lowcut = np.random.randint(0, 3000)
+        highcut = np.random.randint(5000, 8000)
         y = butter_bandpass_filter(data, lowcut, highcut, fs, order=6)
+        file = preFileName + " " + file
     else:
         y = data
 
     spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=512)
     removerEjes()
 
-    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000, cmap='gray_r')
+    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000) #, cmap='gray_r'
     guardarGrafico(carpetaDestino, file)
 
 

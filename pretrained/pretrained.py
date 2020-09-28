@@ -6,7 +6,14 @@ import os, shutil
 from datetime import datetime
 
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.initializers import Constant
+#from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing import image_dataset_from_directory
+from classification_models.tfkeras import Classifiers
+
+# Para no tener problemas de memoria con la GPU / evitar el problema de cudNN
+os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+ResNet18, preprocess_input = Classifiers.get('resnet18')
 
 # Directorio donde se guardarán los logs de cada ejecución de este script
 log_dir = './logs/'
@@ -16,83 +23,80 @@ train_dir = './entrenamiento'
 validation_dir = './validacion'
 
 # Parámetros de la red neuronal
-batch_size = 32
+batch_size = 16
 IMG_SIZE = (160, 160)
 IMG_SHAPE = IMG_SIZE + (3,)
 CLASS_MODE = 'binary'
-base_learning_rate = 0.0003
-initial_epochs = 200
+base_learning_rate = 0.0005
+initial_epochs = 100
 
-train_datagen = ImageDataGenerator(
-	rescale=1./255, # Hacemos que todos los píxeles estén en un rango de 0 a 1
-	brightness_range=(0.3, 1.0) # Cambia el brillo d las imágenes según el rango especificado		
-		
-)
 
-validation_datagen = ImageDataGenerator(rescale=1./255) 
+# Leemos todas las imágenes de las carpetas de entrenamiento y validación
+train_dataset = image_dataset_from_directory(train_dir,
+                                                  shuffle=True,
+                                                  batch_size=batch_size,
+												  color_mode="rgb",
+                                                  image_size=IMG_SIZE)
 
-# Procesa todas las imagenes que esten dentro de las carpetas
-train_dataset = train_datagen.flow_from_directory(
-	train_dir,
-	target_size=IMG_SIZE, 
-	batch_size=batch_size,
-	color_mode="rgb",
-	class_mode=CLASS_MODE
-)
+validation_dataset = image_dataset_from_directory(validation_dir,
+                                                  shuffle=True,
+                                                  batch_size=batch_size,
+												  color_mode="rgb",
+                                                  image_size=IMG_SIZE)
 
-validation_dataset = validation_datagen.flow_from_directory(
-	validation_dir,
-	target_size=IMG_SIZE,
-	batch_size=batch_size,
-	color_mode="rgb",
-	class_mode=CLASS_MODE
-)
+# Use buffered prefetching to load images from disk without having I/O become blocking. 
+AUTOTUNE = tf.data.experimental.AUTOTUNE
 
-# AUTOTUNE = tf.data.experimental.AUTOTUNE
+train_dataset = train_dataset.prefetch(buffer_size=AUTOTUNE)
+validation_dataset = validation_dataset.prefetch(buffer_size=AUTOTUNE)
 
-# train_dataset = train_dataset.prefetch(buffer_size=AUTOTUNE)
-# validation_dataset = validation_dataset.prefetch(buffer_size=AUTOTUNE)
-
-# Create the base model from the pre-trained model MobileNet V2
-# include_top = false hace que se cargue la red neuronal sin traer la última 
+# Importamos el modelo base desde una red neuronal pre-entrenada
+# include_top = false hace que se cargue la red neuronal sin traer la última capa (fully connected layer),
+# que es lo que queremos, ya que deseamos pre-entrenar, y no usar las mismas predicciones de la pre-entrenada
 # base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
 #                                                include_top=False,
 #                                                weights='imagenet')
 
-base_model = tf.keras.applications.ResNet152V2(
-	include_top=False,
-	weights="imagenet",
-	input_shape=IMG_SHAPE
-)
+# base_model = tf.keras.applications.ResNet152V2(
+# 	include_top=False,
+# 	weights="imagenet",
+# 	input_shape=IMG_SHAPE
+# )
 
+base_model = ResNet18(input_shape=IMG_SHAPE, weights='imagenet', include_top=False)
 
+# Extraemos las caracteristicas / feature extractor
 image_batch, label_batch = next(iter(train_dataset))
 feature_batch = base_model(image_batch)
 
+# Congelamos todas las capas de la red pre-entrenada para prevenir que se entrenen
 base_model.trainable = False
 
 global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
-feature_batch_average = global_average_layer(feature_batch)
-
 prediction_layer = tf.keras.layers.Dense(1)
-prediction_batch = prediction_layer(feature_batch_average)
 
-
+# Input crea un tensor 
 inputs = tf.keras.Input(shape=(160, 160, 3))
 # x = data_augmentation(inputs)
-# x = preprocess_input(x)
-# x = base_model(x, training=False)
-x = base_model(inputs, training=False)
+# Pre-procesamos el input para que se adapte a lo que necesita RESNET18, esto es necesario porque la red 
+# fue entrenada con un input totalmente diferente al que vamos usar nosotros
+x = preprocess_input(inputs)
+x = base_model(x, training=False)
 x = global_average_layer(x)
-x = tf.keras.layers.Dropout(0.2)(x)
+#x = tf.keras.layers.Dropout(0.2)(x)
+
+x = tf.keras.layers.PReLU(alpha_initializer=Constant(value=0.25))(x)
+x = tf.keras.layers.PReLU(alpha_initializer=Constant(value=0.25))(x)
+x = tf.keras.layers.Dropout(0.5)(x)
 outputs = prediction_layer(x)
 model = tf.keras.Model(inputs, outputs)
 
+# Configuramos el modelo, indicando su learning reate, la funcion que va a ser utilizada en las metricas, y la metrica de accuracy
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=base_learning_rate),
               loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
               metrics=['accuracy'])
-
-loss0, accuracy0 = model.evaluate(validation_dataset)
+ 
+#loss0, accuracy0 = model.evaluate(validation_dataset)
 
 history = model.fit(train_dataset,
                     epochs=initial_epochs,
