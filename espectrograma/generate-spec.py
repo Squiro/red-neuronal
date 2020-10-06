@@ -146,18 +146,22 @@ def spectrogram(path, file, carpetaDestino, preprocess, preFileName=""):
         data = randomSignalRoll(data)
 
         fs = sr # Sample rate
-        lowcut = np.random.randint(0, 3000)
+        lowcut = np.random.randint(1, 3000)
         highcut = np.random.randint(5000, 8000)
         y = butter_bandpass_filter(data, lowcut, highcut, fs, order=6)
         file = preFileName + " " + file
     else:
         y = data
 
-    spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=512)
+    hop_length = 512
+    spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=hop_length*2, hop_length=hop_length)   
+
     removerEjes()
 
-    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000) #, cmap='gray_r'
-    guardarGrafico(carpetaDestino, file)
+    # Argumento cmap='gray_r' dentro de specshow para espectrograma en escala de grises
+    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), cmap='gray_r', fmax=8000) 
+    #librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
 
+    guardarGrafico(carpetaDestino, file)
 
 main()

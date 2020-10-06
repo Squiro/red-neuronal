@@ -18,9 +18,9 @@ ResNet18, preprocess_input = Classifiers.get('resnet18')
 # Directorio donde se guardarán los logs de cada ejecución de este script
 log_dir = './logs/'
 # Directorio donde se encuentra el dataset de entrenamiento
-train_dir = './entrenamiento'
+train_dir = './entrenamiento/'
 # Directorio donde se encuentra el dataset de validación
-validation_dir = './validacion'
+validation_dir = './validacion/'
 
 # Parámetros de la red neuronal
 batch_size = 16
