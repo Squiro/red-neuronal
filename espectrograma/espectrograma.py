@@ -27,7 +27,10 @@ pathTestImagesSanos = "./images-unlam/test-images/sanos"
 
 #Porcentaje asignado a entrenamiento y validación
 porcentajeEntrenamiento = 70
-porcentajeValidacion = 20
+porcentajeValidacion = 30
+
+# hop_length
+hop_length = 512
 
 #Offset y duracion que usamos para los audios de mPower
 #Si se van a crear esos espectrogramas, deberiamos enviar dichos parametros a las funciones
@@ -39,10 +42,12 @@ def main():
     crearDirectorios()
 
     print("Elija el tipo de gráfico a crear")
-    print("1- Espectrograma con ejes")
-    print("2- Espectrograma sin ejes")
+    print("1- Melspectrogram con ejes")
+    print("2- Melspectrogram sin ejes")
     print("3- MFCC (Coeficientes Cepstrales) con ejes") 
     print("4- MFCC (Coeficientes Cepstrales) sin ejes") 
+    print("5- Log spectrogram con ejes")
+    print("6- Log spectrogram sin ejes")
     
     num = int(input("Selecciona: "))
 
@@ -54,6 +59,10 @@ def main():
         recorrerAudios(crearMFCCConEjes)
     elif (num == 4):
         recorrerAudios(crearMFCCSinEjes)  
+    elif (num == 5):
+        recorrerAudios(crearEspectrogramaLogConEjes)
+    elif (num == 6):
+        recorrerAudios(crearEspectrogramaLogSinEjes)
 
     print("Todos los espectrogramas fueron creados")
 
@@ -119,7 +128,8 @@ def crearMFCCConEjes(path, file, carpetaDestino, off=0.0, dur=None):
         y, sr = librosa.load(path + file, offset=off, duration=dur)
         mfcc = librosa.feature.mfcc(y=y, sr=sr)             
         plt.figure(figsize=(6,4))
-        librosa.display.specshow(mfcc, x_axis='time', cmap='gray_r')     
+        # cmap='gray_r'
+        librosa.display.specshow(mfcc, x_axis='time')     
         plt.colorbar()  
         guardarGrafico(carpetaDestino, file)
     except Exception as e:
@@ -150,13 +160,14 @@ def crearEspectrogramaConEjes(path, file, carpetaDestino, off=0.0, dur=None):
         # n_ftt se usa para establecer el tamaño de la ventana en la STFT
         # para análisis de voz, se recomienda utilizar n_ftt = 512 (lo que da una window lenght de 23ms, similar a la que usaron en el paper)
         # win_length es para dividir cada trama del audio en ventanas, si no se indica este parámetro por defecto es igual a n_ftt
-        spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=512)
+        spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=hop_length*2, hop_length=hop_length)
         plt.figure(figsize=(6,4))
         
         # Power_to_db convierte un espectrograma a unidades de decibeles
         # fmax es un parámetro para definir cuál es la frecuencia máxima
         #librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
-        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), x_axis='time', y_axis='mel', fmax=8000, cmap='gray_r')
+        # cmap='gray_r'
+        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), x_axis='time', y_axis='mel', fmax=8000, cmap='viridis')
         plt.colorbar(format='%+2.0f dB')        
         guardarGrafico(carpetaDestino, file)
     except Exception as e: 
@@ -165,18 +176,36 @@ def crearEspectrogramaConEjes(path, file, carpetaDestino, off=0.0, dur=None):
 def crearEspectrogramaSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
     try: 
         y, sr = librosa.load(path + file, offset=off, duration=dur)
-        spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=512)
-        removerEjes()
-        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000, cmap='gray_r')        
+        spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=hop_length*2, hop_length=hop_length)  
+        removerEjes()        
+        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000, cmap='viridis')        #cmap='gray_r'
         guardarGrafico(carpetaDestino, file)
     except Exception as e: 
         print(e)
 
-#def crearEspectrogramaDelta():
+def crearEspectrogramaLogConEjes(path, file, carpetaDestino, off=0.0, dur=None):
+    try:
+        y, sr = librosa.load(path + file, offset=off, duration=dur)
+        spectrogram = librosa.amplitude_to_db(np.abs(librosa.stft(y, hop_length=hop_length)), ref=np.max)
+        plt.figure(figsize=(6,4))
+        librosa.display.specshow(spectrogram, y_axis='log', sr=sr, hop_length=hop_length, x_axis='time', cmap='viridis')
+        plt.colorbar(format='%+2.0f dB')        
+        guardarGrafico(carpetaDestino, file)
+    except Exception as e:
+        print(e)
 
 
-#def cargarArchivo(path, file, off, dur):
-#    return librosa.load(path + file, offset=off, duration=dur)
+def crearEspectrogramaLogSinEjes(path, file, carpetaDestino, off=0.0, dur=None):
+    try:
+        y, sr = librosa.load(path + file, offset=off, duration=dur)
+        spectrogram = librosa.amplitude_to_db(np.abs(librosa.stft(y, hop_length=hop_length)), ref=np.max)
+        removerEjes()
+        librosa.display.specshow(spectrogram, sr=sr, hop_length=hop_length, cmap='viridis')
+        guardarGrafico(carpetaDestino, file)
+    except Exception as e:
+        print(e)
+
+
 
 def removerEjes():
     # Removemos los bordes del espectrograma y ajustamos su tamaño (figsize)

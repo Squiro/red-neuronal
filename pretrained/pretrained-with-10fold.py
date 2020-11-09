@@ -14,20 +14,20 @@ from sklearn.model_selection import StratifiedKFold
 
 # Para no tener problemas de memoria con la GPU / evitar el problema de cudNN
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-ResNet18, preprocess_input = Classifiers.get('resnet18')
+#ResNet18, preprocess_input = Classifiers.get('resnet18')
 
 # Directorio donde se guardarán los logs de cada ejecución de este script
 log_dir = './logs/'
 # Directorio donde se encuentra el dataset
-dataset_dir = './entrenamiento/'
+dataset_dir = './dataset/'
 
 # Parámetros de la red neuronal
-batch_size = 16
+batch_size = 32
 IMG_SIZE = (160, 160)
 IMG_SHAPE = IMG_SIZE + (3,)
 CLASS_MODE = 'binary'
 base_learning_rate = 0.0005
-initial_epochs = 100
+initial_epochs = 250
 
 # K fold parameters
 num_folds = 10
@@ -40,7 +40,7 @@ loss_per_fold = []
 dataset = image_dataset_from_directory(dataset_dir,
                                                   shuffle=True,
                                                   batch_size=batch_size,
-												  color_mode="rgb",
+												                          color_mode="rgb",
                                                   image_size=IMG_SIZE)
 
 
@@ -59,12 +59,10 @@ for images, labels in dataset.as_numpy_iterator():
 # Importamos el modelo base desde una red neuronal pre-entrenada
 # include_top = false hace que se cargue la red neuronal sin traer la última capa (fully connected layer),
 # que es lo que queremos, ya que deseamos pre-entrenar, y no usar las mismas predicciones de la pre-entrenada
-base_model = ResNet18(input_shape=IMG_SHAPE, weights='imagenet', include_top=False)
+#base_model = ResNet18(input_shape=IMG_SHAPE, weights='imagenet', include_top=False)
+base_model = tf.keras.applications.Xception(input_shape=IMG_SHAPE, weights='imagenet', include_top=False)
 
-# Extraemos las caracteristicas / feature extractor
-image_batch, label_batch = next(iter(dataset))
-
-feature_batch = base_model(image_batch)
+preprocess_input = tf.keras.applications.xception.preprocess_input
 
 # Congelamos todas las capas de la red pre-entrenada para prevenir que se entrenen
 base_model.trainable = False
@@ -73,11 +71,12 @@ global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
 prediction_layer = tf.keras.layers.Dense(1)
 
 # Input crea un tensor 
-inputs = tf.keras.Input(shape=(160, 160, 3))
+inputs = tf.keras.Input(shape=(IMG_SHAPE))
 # x = data_augmentation(inputs)
 # Pre-procesamos el input para que se adapte a lo que necesita RESNET18, esto es necesario porque la red 
 # fue entrenada con un input totalmente diferente al que vamos usar nosotros
 x = preprocess_input(inputs)
+# feature extraction layer
 x = base_model(x, training=False)
 x = global_average_layer(x)
 #x = tf.keras.layers.Dropout(0.2)(x)
@@ -94,6 +93,7 @@ kfold = StratifiedKFold(n_splits=num_folds, shuffle=True)
 
 # K-fold Cross Validation model evaluation
 fold_no = 1
+
 for train, test in kfold.split(numpy_images, numpy_labels):
     # preprocesamiento del train en cada iteracion?
 
@@ -120,6 +120,7 @@ for train, test in kfold.split(numpy_images, numpy_labels):
 
     # Increase fold number
     fold_no = fold_no + 1
+tf.keras.backend.clear_session()
 
 # == Provide average scores ==
 print('------------------------------------------------------------------------')
@@ -141,13 +142,40 @@ os.mkdir(sessionLog_dir)
 
 # Copiamos el set de datos usado en esta sesión
 
-print('Copiando dataset utilizado en esta sesión')
+#print('Copiando dataset utilizado en esta sesión')
 
-os.mkdir(sessionLog_dir + '/dataset/')
-# os.mkdir(sessionLog_dir + '/dataset/entrenamiento')
-# os.mkdir(sessionLog_dir + '/dataset/validacion')
+#os.mkdir(sessionLog_dir + '/dataset/')
 
 # source, dest
-shutil.copytree(dataset_dir, sessionLog_dir + '/dataset/entrenamiento')
+#shutil.copytree(dataset_dir, sessionLog_dir + '/dataset/entrenamiento')
 
-print('Dataset copiado')
+#print('Dataset copiado')
+
+# Generamos un archivo de texto con los parámetros utilizados en esta sesión
+
+print('Creando archivo de paramétros')
+
+# a+ crea un archivo de lectura y escritura
+paramFile = open(sessionLog_dir + "/parametros.txt", "a+")
+paramFile.write("batch_size: " + str(batch_size) + "\n")
+paramFile.write("IMG_SIZE: " + str(IMG_SIZE) + "\n")
+paramFile.write("IMG_SHAPE: " + str(IMG_SHAPE) + "\n")
+paramFile.write("CLASS_MODE: " + str(CLASS_MODE) + "\n")
+paramFile.write("base_learning_rate: " + str(base_learning_rate) + "\n")
+paramFile.write("initial_epochs: " + str(initial_epochs) + "\n")
+
+# == Provide average scores ==
+paramFile.write('------------------------------------------------------------------------\n')
+paramFile.write('Score per fold\n')
+for i in range(0, len(acc_per_fold)):
+  paramFile.write('------------------------------------------------------------------------\n')
+  paramFile.write(f'> Fold {i+1} - Loss: {loss_per_fold[i]} - Accuracy: {acc_per_fold[i]}% \n')
+paramFile.write('------------------------------------------------------------------------\n')
+paramFile.write('Average scores for all folds: \n')
+paramFile.write(f'> Accuracy: {np.mean(acc_per_fold)} (+- {np.std(acc_per_fold)}) \n')
+paramFile.write(f'> Loss: {np.mean(loss_per_fold)} \n')
+paramFile.write('------------------------------------------------------------------------\n')
+
+paramFile.close()
+
+print('Archivo de paramétros generado')
