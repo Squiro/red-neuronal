@@ -41,11 +41,6 @@ def readDataset(batch_size):
                                                     batch_size=batch_size,
                                                     color_mode="rgb",
                                                     image_size=IMG_SIZE)
-  
-  # for images, labels in dataset.take(-1): #-1 takes all elements
-  #   print(images.numpy())
-  #   numpy_images = images.numpy()
-  #   numpy_labels = labels.numpy()
 
   numpy_images = np.array([])
   numpy_labels = np.array([])
@@ -109,7 +104,6 @@ def train(batch_size, base_learning_rate, initial_epochs, numpy_images, numpy_la
   loss_per_fold = []
 
   # Define the K-fold Cross Validator
-  #kfold = KFold(n_splits=num_folds, shuffle=True)
   kfold = StratifiedKFold(n_splits=num_folds, shuffle=True)
 
   # K-fold Cross Validation model evaluation
@@ -151,9 +145,9 @@ def getModel():
   # include_top = false hace que se cargue la red neuronal sin traer la última capa (fully connected layer),
   # que es lo que queremos, ya que deseamos pre-entrenar, y no usar las mismas predicciones de la pre-entrenada
   #base_model = ResNet18(input_shape=IMG_SHAPE, weights='imagenet', include_top=False)
-  base_model = tf.keras.applications.ResNet50V2(input_shape=IMG_SHAPE, weights='imagenet', include_top=False)
+  base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE, weights='imagenet', include_top=False)
 
-  preprocess_input = tf.keras.applications.resnet.preprocess_input
+  preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
 
   # Congelamos todas las capas de la red pre-entrenada para prevenir que se entrenen
   base_model.trainable = False

@@ -1,8 +1,8 @@
 data
 modelo
+docs
 test-images
 espectrograma/audios
-espectrograma/images-mpower
-espectrograma/images-unlam
+espectrograma/spectograms
 logs
 trash
