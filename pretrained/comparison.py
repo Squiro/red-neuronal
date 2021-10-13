@@ -158,7 +158,7 @@ def getModel():
   # Input crea un tensor 
   inputs = tf.keras.Input(shape=(IMG_SHAPE))
   # x = data_augmentation(inputs)
-  # Pre-procesamos el input para que se adapte a lo que necesita RESNET18, esto es necesario porque la red 
+  # Pre-procesamos el input para que se adapte a lo que necesita la red, esto es necesario porque la red 
   # fue entrenada con un input totalmente diferente al que vamos usar nosotros
   x = preprocess_input(inputs)
   # feature extraction layer
