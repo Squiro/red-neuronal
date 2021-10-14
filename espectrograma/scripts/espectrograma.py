@@ -2,12 +2,11 @@
 import os
 import librosa
 import librosa.display
-from matplotlib import cm
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal.windows import hann
 
-CURR_LETTER = "A"
+CURR_LETTER = "I"
 pathAudios = "../audios/unlam/2020/procesados/" + CURR_LETTER
 
 #Rutas base donde serán guardados los espectrogramas creados
@@ -20,21 +19,20 @@ pathEnfermos = "/enfermos/"
 pathSanos = "/sanos/"
 
 #Porcentaje asignado a entrenamiento y validación
-porcentajeEntrenamiento = 100
-porcentajeValidacion = 0
+porcentajeEntrenamiento = 60
+porcentajeValidacion = 20
 
 # Default sampling rate de los archivos de audio
-# sampling_rate = 44100
+sampling_rate = 44100
 
 # Tamaño de los frames utilizados FFT. Valores recomendados para speech: entre 23 y 40 ms
 # Si sr = 44100 => 0.023 * 44100 = 1014 (frame size)
-
-# Utilizamos el valor en milisegundos en vez de cantidad de muestras  
+# Utilizamos el tamaño en milisegundos en vez de cantidad de muestras  
 n_fft = 0.040
 
 # Overlapping de los frames, utilizado para prevenir saltos o discontinuidades. Valores recomendados: 50% (+-10%) del tamaño del frame como overlap
 # Si sr = 44100 => 0.015 * 44100 = 661 (hop length)
-hop_length = 0.015
+hop_length = n_fft*(50/100)
 
 # List of color maps for the spectogram creation
 C_MAPS = [ "magma", "viridis", "gray_r" ]
@@ -94,7 +92,6 @@ def recorrerAudios(method):
         listaEnfermos = os.listdir(pathAudiosEnfermos)
         listaSanos = os.listdir(pathAudiosSanos)
 
-        #Resultados de los porcentajes realizados sobre las listas
         cantEntrenamientoEnfermos = porcentaje(len(listaEnfermos), porcentajeEntrenamiento)
         cantValidacionEnfermos = porcentaje(len(listaEnfermos), porcentajeValidacion)
         cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
@@ -117,7 +114,7 @@ def mfcc(path, file, save_path, off=0.0, dur=None, cmap="magma"):
         y, sr = librosa.load(path + file, offset=off, duration=dur, sr=None)
         mfcc = librosa.feature.mfcc(y, sr)             
         removeAxis()
-        librosa.display.specshow(mfcc, cmap)       
+        librosa.display.specshow(mfcc, sr, cmap=cmap, y_axis='mel')       
         saveSpec(save_path, file)
     except Exception as e:
         print(e)
@@ -150,10 +147,8 @@ def getMel(path, file, off=0.0, dur=None):
 
 def saveMel(spectrogram, file, save_path, cmap):
     removeAxis()      
-    # Power_to_db convierte un espectrograma a unidades de decibeles
-    # fmax es un parámetro para definir cuál es la frecuencia máxima
-    #librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
-    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000, cmap=cmap)
+    # Power_to_db convierte un espectrograma de amplitude squared a decibeles
+    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), sr=sampling_rate, hop_length=hop_length, fmax=8000, cmap=cmap, y_axis='mel')
     saveSpec(save_path, file)
 
 
@@ -168,8 +163,8 @@ def melSpectrogram(path, file, save_path, off=0.0, dur=None, cmap="magma"):
 
 def melFirstDerivative(path, file, save_path, off=0.0, dur=None, cmap="magma"):
     try:
-        spectrogram = getMel(path, file, off, dur)
-        spectrogram = librosa.feature.delta(spectrogram)
+         
+        spectrogram = librosa.feature.delta(getMel(path, file, off, dur), width=17)
         saveMel(spectrogram, file, save_path, cmap)
     except Exception as e: 
         print(e)
@@ -188,7 +183,7 @@ def logSpectrogram(path, file, save_path, off=0.0, dur=None, cmap="magma"):
         y, sr = librosa.load(path + file, offset=off, duration=dur, sr=None)
         spectrogram = librosa.amplitude_to_db(np.abs(librosa.stft(y)), ref=np.max)
         removeAxis()
-        librosa.display.specshow(spectrogram, sr=sr, cmap=cmap)
+        librosa.display.specshow(spectrogram, sr=sr, cmap=cmap, y_axis='log')
         saveSpec(save_path, file)
     except Exception as e:
         print(e)
