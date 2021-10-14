@@ -2,11 +2,12 @@
 import os
 import librosa
 import librosa.display
+from matplotlib import cm
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal.windows import hann
 
-CURR_LETTER = "I"
+CURR_LETTER = "A"
 pathAudios = "../audios/unlam/2020/procesados/" + CURR_LETTER
 
 #Rutas base donde serán guardados los espectrogramas creados
@@ -19,10 +20,21 @@ pathEnfermos = "/enfermos/"
 pathSanos = "/sanos/"
 
 #Porcentaje asignado a entrenamiento y validación
-porcentajeEntrenamiento = 60
-porcentajeValidacion = 20
+porcentajeEntrenamiento = 100
+porcentajeValidacion = 0
 
-hop_length = 512
+# Default sampling rate de los archivos de audio
+# sampling_rate = 44100
+
+# Tamaño de los frames utilizados FFT. Valores recomendados para speech: entre 23 y 40 ms
+# Si sr = 44100 => 0.023 * 44100 = 1014 (frame size)
+
+# Utilizamos el valor en milisegundos en vez de cantidad de muestras  
+n_fft = 0.040
+
+# Overlapping de los frames, utilizado para prevenir saltos o discontinuidades. Valores recomendados: 50% (+-10%) del tamaño del frame como overlap
+# Si sr = 44100 => 0.015 * 44100 = 661 (hop length)
+hop_length = 0.015
 
 # List of color maps for the spectogram creation
 C_MAPS = [ "magma", "viridis", "gray_r" ]
@@ -32,9 +44,11 @@ def main():
     crearDirectorios()
 
     print("Elija el tipo de gráfico a crear")
-    print("1- Melspectrogram")
+    print("1- Mel spectrogram")
     print("2- MFCC (Coeficientes Cepstrales)") 
     print("3- Log spectrogram")
+    print("4- Mel spectrogram first derivative")
+    print("5- Mel spectrogram second derivative")
     
     num = int(input("Selecciona: "))
 
@@ -44,6 +58,10 @@ def main():
         recorrerAudios(mfcc)  
     elif (num == 3):
         recorrerAudios(logSpectrogram)
+    elif (num == 4):
+        recorrerAudios(melFirstDerivative)
+    elif (num == 5):
+        recorrerAudios(melSecondDerivative)
 
     print("Todos los espectrogramas fueron creados")
 
@@ -96,64 +114,89 @@ def generate(dirList, method, audio_path, save_path, trainingAmount, validationA
 
 def mfcc(path, file, save_path, off=0.0, dur=None, cmap="magma"):
     try: 
-        y, sr = librosa.load(path + file, offset=off, duration=dur)
-        mfcc = librosa.feature.mfcc(y=y, sr=sr)             
+        y, sr = librosa.load(path + file, offset=off, duration=dur, sr=None)
+        mfcc = librosa.feature.mfcc(y, sr)             
         removeAxis()
-        librosa.display.specshow(mfcc, cmap=cmap)       
+        librosa.display.specshow(mfcc, cmap)       
         saveSpec(save_path, file)
     except Exception as e:
         print(e)
 
+
+def getMel(path, file, off=0.0, dur=None):
+    # Librosa utiliza una STFT para realizar los espectrogramas. La STFT utiliza una "ventana de tiempo".
+    # 
+    # Las ventanas de tiempo son muy importantes e influyen en el resultado del espectrograma, debido a que uno de los problemas que tiene STFT es que, dependiendo del tamaño de la ventana,
+    # puede perder resolución de frecuencia, o resolución de tiempo.
+    #
+    # La "resolución de frecuencia" es lo que nos permite identificar con claridad el valor de la frecuencia en el espectrograma. Si perdemos resolución de frecuencia en un espectrograma,
+    # nos va a costar distinguir el valor de la frecuencia.
+    #
+    # La "resolución de tiempo" nos indica el tiempo en que las frecuencias cambian. Si perdemos resolución de tiempo, en el espectrograma no vamos a notar claramente cuándo
+    # cambian las    frecuencias.
+    # 
+    # La regla es la siguiente: si disminuimos el tamaño de la ventana, aumenta la resolución de tiempo. Si aumentamos el tamaño de la ventana, aumenta la resolución
+    # de la frecuencia.
+    #
+    # Parámetros:
+    # n_ftt se usa para establecer el tamaño de la ventana en la STFT
+    # para análisis de voz, se recomienda utilizar un frame entre 23 y 40ms de duración
+    # win_length largo de la ventana de la funcion window, si no se indica este parámetro por defecto es igual a n_ftt
+
+    # sr=None preserva el sampling rate original del archivo, de otra forma librosa realiza un resampling a 22050
+    y, sr = librosa.load(path + file, offset=off, duration=dur, sr=None)
+    # fmin=100, fmax=6800, n_mels=320
+    return librosa.feature.melspectrogram(y, sr, n_fft=int(n_fft*sr), hop_length=int(hop_length*sr), window=hann)  
+
+def saveMel(spectrogram, file, save_path, cmap):
+    removeAxis()      
+    # Power_to_db convierte un espectrograma a unidades de decibeles
+    # fmax es un parámetro para definir cuál es la frecuencia máxima
+    #librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
+    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000, cmap=cmap)
+    saveSpec(save_path, file)
+
+
+# offset: cuantos segundos nos desplazamos desde el archivo original (float)
+# duration: cuantos segundos de audio leemos (float)
 def melSpectrogram(path, file, save_path, off=0.0, dur=None, cmap="magma"):
     try: 
-        # offset: cuantos segundos nos desplazamos desde el archivo original (float)
-        # duration: cuantos segundos de audio leemos (float)
-        # Podemos utilizar el offset y la duracion para evitar los problemas que hayan en el audio grabado.
-        y, sr = librosa.load(path + file, offset=off, duration=dur)
-        spectrogram = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=hop_length*2, hop_length=hop_length, window=hann)  
-        # Librosa utiliza una STFT para realizar los espectrogramas. La STFT utiliza una "ventana de tiempo".
-        # 
-        # Las ventanas de tiempo son muy importantes e influyen en el resultado del espectrograma, debido a que uno de los problemas que tiene STFT es que, dependiendo del tamaño de la ventana,
-        # puede perder resolución de frecuencia, o resolución de tiempo.
-        #
-        # La "resolución de frecuencia" es lo que nos permite identificar con claridad el valor de la frecuencia en el espectrograma. Si perdemos resolución de frecuencia en un espectrograma,
-        # nos va a costar distinguir el valor de la frecuencia.
-        #
-        # La "resolución de tiempo" nos indica el tiempo en que las frecuencias cambian. Si perdemos resolución de frecuencia, en el espectrograma no vamos a notar claramente cuándo
-        # cambian esas frecuencias.
-        # 
-        # La regla es la siguiente: si disminuimos el tamaño de la ventana, aumenta la resolución de tiempo. Si aumentamos el tamaño de la ventana, aumenta la resolución
-        # de la frecuencia.
-        #
-        # Parámetros:
-        # n_ftt se usa para establecer el tamaño de la ventana en la STFT
-        # para análisis de voz, se recomienda utilizar n_ftt = 512 (lo que da una window lenght de 23ms, similar a la que es usada en varios papers)
-        # win_length es para dividir cada trama del audio en ventanas, si no se indica este parámetro por defecto es igual a n_ftt
-        removeAxis()      
-        # Power_to_db convierte un espectrograma a unidades de decibeles
-        # fmax es un parámetro para definir cuál es la frecuencia máxima
-        #librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000)
-        librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), fmax=8000, cmap=cmap)
-        saveSpec(save_path, file)
+        spectrogram = getMel(path, file, off, dur)
+        saveMel(spectrogram, file, save_path, cmap)
+    except Exception as e: 
+        print(e)
+
+def melFirstDerivative(path, file, save_path, off=0.0, dur=None, cmap="magma"):
+    try:
+        spectrogram = getMel(path, file, off, dur)
+        spectrogram = librosa.feature.delta(spectrogram)
+        saveMel(spectrogram, file, save_path, cmap)
+    except Exception as e: 
+        print(e)
+
+def melSecondDerivative(path, file, save_path, off=0.0, dur=None, cmap="magma"):
+    try:
+        spectrogram = getMel(path, file, off, dur)
+        spectrogram = librosa.feature.delta(spectrogram)
+        spectrogram = librosa.feature.delta(spectrogram, order=2)
+        saveMel(spectrogram, file, save_path, cmap)
     except Exception as e: 
         print(e)
 
 def logSpectrogram(path, file, save_path, off=0.0, dur=None, cmap="magma"):
     try:
-        y, sr = librosa.load(path + file, offset=off, duration=dur)
-        spectrogram = librosa.amplitude_to_db(np.abs(librosa.stft(y, hop_length=hop_length)), ref=np.max)
+        y, sr = librosa.load(path + file, offset=off, duration=dur, sr=None)
+        spectrogram = librosa.amplitude_to_db(np.abs(librosa.stft(y)), ref=np.max)
         removeAxis()
-        librosa.display.specshow(spectrogram, sr=sr, hop_length=hop_length, cmap=cmap)
+        librosa.display.specshow(spectrogram, sr=sr, cmap=cmap)
         saveSpec(save_path, file)
     except Exception as e:
         print(e)
 
 def removeAxis():
-    # Removemos los bordes del espectrograma y ajustamos su tamaño (figsize)
-    fig, ax = plt.subplots(1, figsize=(6,4))
-    fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
-    # Removemos los ejes del espectrograma
-    ax.axis('off')
+    # Removemos los bordes y ejes del espectrograma y ajustamos su tamaño (figsize)
+    #fig = plt.subplots() #plt.subplots(1, figsize=(6,4))
+    plt.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace = 0, wspace = 0)
 
 def saveSpec(save_path, file): 
     # Guardamos la imagen en el directorio
