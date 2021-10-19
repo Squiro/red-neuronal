@@ -1,0 +1,7 @@
+Cambios realizados en la creación de espectrogramas:
+
+-Corregido el uso de los parámetros n_ftt (tamaño del frame utilizado en FFT) y hop_length (overlapping frames consecutivos al realizar FFT).
+-Los audios no son remuestreados al sampling rate nativo de librosa (22050hz). Se mantienen con su tasa de muestreo original (44100hz).
+-La llamada a la librosa.melspectrogram ahora contiene la funcion el parámetro window=hann, para dejar en claro qué función de Windowing está siendo utilizada.
+-Las llamadas a librosa.specshow ahora contienen los parámetros sampling rate, hop_length, y_axis.
+-Se ha removido el parámetro fmax de la llamada a librosa.specshow. El mismo es inferido automáticamente por librosa.

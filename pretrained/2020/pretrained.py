@@ -51,8 +51,8 @@ train_dataset = train_dataset.prefetch(buffer_size=AUTOTUNE)
 validation_dataset = validation_dataset.prefetch(buffer_size=AUTOTUNE)
 
 # Importamos el modelo base desde una red neuronal pre-entrenada
-# include_top = false hace que se cargue la red neuronal sin traer la última capa (fully connected layer),
-# que es lo que queremos, ya que deseamos pre-entrenar, y no usar las mismas predicciones de la pre-entrenada
+# include_top = false toma la arquitectura de la red sin traer la última capa (classification layer),
+# debido a que las capas anteriores poseen mas generalidad (es decir, dependen menos del dataset con el que fueron entrenadas originalmente)
 # base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE,
 #                                                include_top=False,
 #                                                weights='imagenet')

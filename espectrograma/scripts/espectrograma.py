@@ -1,4 +1,4 @@
-# Necesitamos tener instalados los packages: librosa, matplotlib
+# Necesitamos tener instalados los packages: librosa 0.8.1, matplotlib
 import os
 import librosa
 import librosa.display
@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal.windows import hann
 
-CURR_LETTER = "I"
+CURR_LETTER = "U"
 pathAudios = "../audios/unlam/2020/procesados/" + CURR_LETTER
 
 #Rutas base donde serán guardados los espectrogramas creados
@@ -19,8 +19,8 @@ pathEnfermos = "/enfermos/"
 pathSanos = "/sanos/"
 
 #Porcentaje asignado a entrenamiento y validación
-porcentajeEntrenamiento = 60
-porcentajeValidacion = 20
+porcentajeEntrenamiento = 100
+porcentajeValidacion = 0
 
 # Default sampling rate de los archivos de audio
 sampling_rate = 44100
@@ -28,7 +28,7 @@ sampling_rate = 44100
 # Tamaño de los frames utilizados FFT. Valores recomendados para speech: entre 23 y 40 ms
 # Si sr = 44100 => 0.023 * 44100 = 1014 (frame size)
 # Utilizamos el tamaño en milisegundos en vez de cantidad de muestras  
-n_fft = 0.040
+n_fft = 0.025
 
 # Overlapping de los frames, utilizado para prevenir saltos o discontinuidades. Valores recomendados: 50% (+-10%) del tamaño del frame como overlap
 # Si sr = 44100 => 0.015 * 44100 = 661 (hop length)
@@ -40,8 +40,8 @@ C_MAPS = [ "magma", "viridis", "gray_r" ]
 def main():
 	#Crea los directorios especificados (en caso de que no existan)
     crearDirectorios()
-
-    print("Elija el tipo de gráfico a crear")
+    
+    print("Elija el tipo de espectrograma a crear:")
     print("1- Mel spectrogram")
     print("2- MFCC (Coeficientes Cepstrales)") 
     print("3- Log spectrogram")
@@ -50,16 +50,31 @@ def main():
     
     num = int(input("Selecciona: "))
 
+    method = melSpectrogram
+
     if (num == 1): 
-        recorrerAudios(melSpectrogram)
+        method = melSpectrogram
     elif (num == 2):
-        recorrerAudios(mfcc)  
+        method = mfcc
     elif (num == 3):
-        recorrerAudios(logSpectrogram)
+        method = logSpectrogram
     elif (num == 4):
-        recorrerAudios(melFirstDerivative)
+        method = melFirstDerivative
     elif (num == 5):
-        recorrerAudios(melSecondDerivative)
+        method = melSecondDerivative
+
+    print("Elija el tipo de slicing a aplicar:")
+    print("1- Ninguno (totalidad del audio)")
+    print("2- Último segundo") 
+
+    num = int(input("Selecciona: "))
+    global slicingType
+    if (num == 1):
+        slicingType = None
+    elif (num ==2): 
+        slicingType = 'lastSecond'
+
+    recorrerAudios(method)   
 
     print("Todos los espectrogramas fueron creados")
 
@@ -103,24 +118,29 @@ def recorrerAudios(method):
 def generate(dirList, method, audio_path, save_path, trainingAmount, validationAmount, cmap):
     # Cada foreach crea espectrogramas con ejes dentro de las carpetas indicadas, de acuerdo a los porcentajes que se hayan definido
     for audio in dirList[0:trainingAmount]:
-        method(audio_path, audio, baseTrainingPath+save_path, cmap=cmap)
-    for audio in dirList[trainingAmount:trainingAmount+validationAmount]:
-        method(audio_path, audio, baseValidationPath+save_path, cmap=cmap)
-    for audio in dirList[trainingAmount+validationAmount:len(dirList)]:
-        method(audio_path, audio, baseTestPath+save_path, cmap=cmap) 
+        offset, dur = calculateSlice(audio_path, audio)
+        method(audio_path, audio, baseTrainingPath+save_path, offset, dur, cmap=cmap)
 
-def mfcc(path, file, save_path, off=0.0, dur=None, cmap="magma"):
+    for audio in dirList[trainingAmount:trainingAmount+validationAmount]:
+        offset, dur = calculateSlice(audio_path, audio)
+        method(audio_path, audio, baseValidationPath+save_path, offset, dur, cmap=cmap)
+
+    for audio in dirList[trainingAmount+validationAmount:len(dirList)]:
+        offset, dur = calculateSlice(audio_path, audio)
+        method(audio_path, audio, baseTestPath+save_path, offset, dur, cmap=cmap) 
+
+def mfcc(path, audio_file, save_path, off=0.0, dur=None, cmap="magma"):
     try: 
-        y, sr = librosa.load(path + file, offset=off, duration=dur, sr=None)
+        y, sr = librosa.load(path + audio_file, offset=off, duration=dur, sr=None)
         mfcc = librosa.feature.mfcc(y, sr)             
         removeAxis()
-        librosa.display.specshow(mfcc, sr, cmap=cmap, y_axis='mel')       
-        saveSpec(save_path, file)
-    except Exception as e:
+        librosa.display.specshow(data=mfcc, sr=sr, cmap=cmap, y_axis='mel')       
+        saveSpec(save_path, audio_file)
+    except Exception as e:        
         print(e)
 
 
-def getMel(path, file, off=0.0, dur=None):
+def getMel(path, audio_file, off=0.0, dur=None):
     # Librosa utiliza una STFT para realizar los espectrogramas. La STFT utiliza una "ventana de tiempo".
     # 
     # Las ventanas de tiempo son muy importantes e influyen en el resultado del espectrograma, debido a que uno de los problemas que tiene STFT es que, dependiendo del tamaño de la ventana,
@@ -141,61 +161,69 @@ def getMel(path, file, off=0.0, dur=None):
     # win_length largo de la ventana de la funcion window, si no se indica este parámetro por defecto es igual a n_ftt
 
     # sr=None preserva el sampling rate original del archivo, de otra forma librosa realiza un resampling a 22050
-    y, sr = librosa.load(path + file, offset=off, duration=dur, sr=None)
+    y, sr = librosa.load(path + audio_file, offset=off, duration=dur, sr=None)
     # fmin=100, fmax=6800, n_mels=320
     return librosa.feature.melspectrogram(y, sr, n_fft=int(n_fft*sr), hop_length=int(hop_length*sr), window=hann)  
 
-def saveMel(spectrogram, file, save_path, cmap):
+def saveMel(spectrogram, audio_file, save_path, cmap):
     removeAxis()      
     # Power_to_db convierte un espectrograma de amplitude squared a decibeles
-    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), sr=sampling_rate, hop_length=hop_length, fmax=8000, cmap=cmap, y_axis='mel')
-    saveSpec(save_path, file)
-
+    librosa.display.specshow(librosa.power_to_db(spectrogram, ref=np.max), sr=sampling_rate, hop_length=hop_length, cmap=cmap, y_axis='mel')
+    saveSpec(save_path, audio_file)
 
 # offset: cuantos segundos nos desplazamos desde el archivo original (float)
 # duration: cuantos segundos de audio leemos (float)
-def melSpectrogram(path, file, save_path, off=0.0, dur=None, cmap="magma"):
+def melSpectrogram(path, audio_file, save_path, off=0.0, dur=None, cmap="magma"):
     try: 
-        spectrogram = getMel(path, file, off, dur)
-        saveMel(spectrogram, file, save_path, cmap)
+        spectrogram = getMel(path, audio_file, off, dur)
+        saveMel(spectrogram, audio_file, save_path, cmap)
     except Exception as e: 
         print(e)
 
-def melFirstDerivative(path, file, save_path, off=0.0, dur=None, cmap="magma"):
+def melFirstDerivative(path, audio_file, save_path, off=0.0, dur=None, cmap="magma"):
     try:
          
-        spectrogram = librosa.feature.delta(getMel(path, file, off, dur), width=17)
-        saveMel(spectrogram, file, save_path, cmap)
+        spectrogram = librosa.feature.delta(getMel(path, audio_file, off, dur))
+        saveMel(spectrogram, audio_file, save_path, cmap)
     except Exception as e: 
         print(e)
 
-def melSecondDerivative(path, file, save_path, off=0.0, dur=None, cmap="magma"):
+def melSecondDerivative(path, audio_file, save_path, off=0.0, dur=None, cmap="magma"):
     try:
-        spectrogram = getMel(path, file, off, dur)
+        spectrogram = getMel(path, audio_file, off, dur)
         spectrogram = librosa.feature.delta(spectrogram)
         spectrogram = librosa.feature.delta(spectrogram, order=2)
-        saveMel(spectrogram, file, save_path, cmap)
+        saveMel(spectrogram, audio_file, save_path, cmap)
     except Exception as e: 
         print(e)
 
-def logSpectrogram(path, file, save_path, off=0.0, dur=None, cmap="magma"):
+def logSpectrogram(path, audio_file, save_path, off=0.0, dur=None, cmap="magma"):
     try:
-        y, sr = librosa.load(path + file, offset=off, duration=dur, sr=None)
+        y, sr = librosa.load(path + audio_file, offset=off, duration=dur, sr=None)
         spectrogram = librosa.amplitude_to_db(np.abs(librosa.stft(y)), ref=np.max)
         removeAxis()
         librosa.display.specshow(spectrogram, sr=sr, cmap=cmap, y_axis='log')
-        saveSpec(save_path, file)
+        saveSpec(save_path, audio_file)
     except Exception as e:
         print(e)
+
+# Returns offset and duration
+def calculateSlice(path, audio_file):
+    if (slicingType == None):
+        return 0.0, None
+
+    totalDur = librosa.get_duration(filename=path+audio_file)
+    if (slicingType == 'lastSecond'):
+        return totalDur-1, 1
 
 def removeAxis():
     # Removemos los bordes y ejes del espectrograma y ajustamos su tamaño (figsize)
     #fig = plt.subplots() #plt.subplots(1, figsize=(6,4))
     plt.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace = 0, wspace = 0)
 
-def saveSpec(save_path, file): 
+def saveSpec(save_path, audio_file): 
     # Guardamos la imagen en el directorio
-    plt.savefig(save_path + '/' + file[:-4] + '.png')
+    plt.savefig(save_path + '/' + audio_file[:-4] + '.png')
     plt.close()
 
 main()
