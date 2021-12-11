@@ -5,22 +5,25 @@ import librosa.display
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal.windows import hann
+import random
 
-CURR_LETTER = "U"
+CURR_LETTER = "A"
 pathAudios = "../audios/unlam/2020/procesados/" + CURR_LETTER
 
+basePath = "../spectrograms/"+CURR_LETTER+"/"
+
 #Rutas base donde serán guardados los espectrogramas creados
-baseTrainingPath = "../spectrograms/"+CURR_LETTER+"/training"
-baseValidationPath = "../spectrograms/"+CURR_LETTER+"/validation"
-baseTestPath = "../spectrograms/"+CURR_LETTER+"/test"
+trainingPath = "/training"
+validationPath = "/validation"
+testPath = "/test"
 
 # Rutas base
 pathEnfermos = "/enfermos/"
 pathSanos = "/sanos/"
 
 #Porcentaje asignado a entrenamiento y validación
-porcentajeEntrenamiento = 100
-porcentajeValidacion = 0
+porcentajeEntrenamiento = 60
+porcentajeValidacion = 20
 
 # Default sampling rate de los archivos de audio
 sampling_rate = 44100
@@ -66,13 +69,16 @@ def main():
     print("Elija el tipo de slicing a aplicar:")
     print("1- Ninguno (totalidad del audio)")
     print("2- Último segundo") 
+    print("3- Mitad del audio") 
 
     num = int(input("Selecciona: "))
     global slicingType
     if (num == 1):
         slicingType = None
-    elif (num ==2): 
+    elif (num == 2): 
         slicingType = 'lastSecond'
+    elif (num == 3):
+        slicingType = "middle"
 
     recorrerAudios(method)   
 
@@ -83,20 +89,19 @@ def porcentaje(num, porciento):
 
 def crearDirectorios():    
     for cmap in C_MAPS:
-        cmapPath = "/"+cmap+"/"
-        if not os.path.exists(baseTrainingPath+pathEnfermos+cmapPath):
-            os.makedirs(baseTrainingPath+pathEnfermos+cmapPath)
-        if not os.path.exists(baseValidationPath+pathEnfermos+cmapPath):
-            os.makedirs(baseValidationPath+pathEnfermos+cmapPath)    
-        if not os.path.exists(baseTestPath+pathEnfermos+cmapPath):
-            os.makedirs(baseTestPath+pathEnfermos+cmapPath)    
+        if not os.path.exists(basePath+cmap+trainingPath+pathEnfermos):
+            os.makedirs(basePath+cmap+trainingPath+pathEnfermos)
+        if not os.path.exists(basePath+cmap+validationPath+pathEnfermos):
+            os.makedirs(basePath+cmap+validationPath+pathEnfermos)    
+        if not os.path.exists(basePath+cmap+testPath+pathEnfermos):
+            os.makedirs(basePath+cmap+testPath+pathEnfermos)    
 
-        if not os.path.exists(baseTrainingPath+pathSanos+cmapPath):
-            os.makedirs(baseTrainingPath+pathSanos+cmapPath)
-        if not os.path.exists(baseValidationPath+pathSanos+cmapPath):
-            os.makedirs(baseValidationPath+pathSanos+cmapPath)    
-        if not os.path.exists(baseTestPath+pathSanos+cmapPath):
-            os.makedirs(baseTestPath+pathSanos+cmapPath)    
+        if not os.path.exists(basePath+cmap+trainingPath+pathSanos):
+            os.makedirs(basePath+cmap+trainingPath+pathSanos)
+        if not os.path.exists(basePath+cmap+validationPath+pathSanos):
+            os.makedirs(basePath+cmap+validationPath+pathSanos)    
+        if not os.path.exists(basePath+cmap+testPath+pathSanos):
+            os.makedirs(basePath+cmap+testPath+pathSanos)    
 
 def recorrerAudios(method):
     for cmap in C_MAPS:
@@ -112,22 +117,25 @@ def recorrerAudios(method):
         cantEntrenamientoSanos = porcentaje(len(listaSanos), porcentajeEntrenamiento)
         cantValidacionSanos = porcentaje(len(listaSanos), porcentajeValidacion)
 
-        generate(listaEnfermos, method, pathAudiosEnfermos, pathEnfermos+cmap, cantEntrenamientoEnfermos, cantValidacionEnfermos, cmap)
-        generate(listaSanos, method, pathAudiosSanos, pathSanos+cmap, cantEntrenamientoSanos, cantValidacionSanos, cmap)   
+        generate(listaEnfermos, method, pathAudiosEnfermos, pathEnfermos, cantEntrenamientoEnfermos, cantValidacionEnfermos, cmap)
+        generate(listaSanos, method, pathAudiosSanos, pathSanos, cantEntrenamientoSanos, cantValidacionSanos, cmap)   
 
 def generate(dirList, method, audio_path, save_path, trainingAmount, validationAmount, cmap):
     # Cada foreach crea espectrogramas con ejes dentro de las carpetas indicadas, de acuerdo a los porcentajes que se hayan definido
     for audio in dirList[0:trainingAmount]:
-        offset, dur = calculateSlice(audio_path, audio)
-        method(audio_path, audio, baseTrainingPath+save_path, offset, dur, cmap=cmap)
+        applySlicing(audio_path, audio, cmap, basePath+cmap+trainingPath+save_path, method)
+        #offset, dur = calculateSlice(audio_path, audio)
+        #method(audio_path, audio, basePath+cmap+trainingPath+save_path, offset, dur, cmap=cmap)
 
     for audio in dirList[trainingAmount:trainingAmount+validationAmount]:
-        offset, dur = calculateSlice(audio_path, audio)
-        method(audio_path, audio, baseValidationPath+save_path, offset, dur, cmap=cmap)
+        applySlicing(audio_path, audio, cmap, basePath+cmap+validationPath+save_path, method)
+        #offset, dur = calculateSlice(audio_path, audio)
+        #method(audio_path, audio, basePath+cmap+validationPath+save_path, offset, dur, cmap=cmap)
 
     for audio in dirList[trainingAmount+validationAmount:len(dirList)]:
-        offset, dur = calculateSlice(audio_path, audio)
-        method(audio_path, audio, baseTestPath+save_path, offset, dur, cmap=cmap) 
+        applySlicing(audio_path, audio, cmap, basePath+cmap+testPath+save_path, method)
+        #offset, dur = calculateSlice(audio_path, audio)
+        #method(audio_path, audio, basePath+cmap+testPath+save_path, offset, dur, cmap=cmap) 
 
 def mfcc(path, audio_file, save_path, off=0.0, dur=None, cmap="magma"):
     try: 
@@ -141,24 +149,23 @@ def mfcc(path, audio_file, save_path, off=0.0, dur=None, cmap="magma"):
 
 
 def getMel(path, audio_file, off=0.0, dur=None):
-    # Librosa utiliza una STFT para realizar los espectrogramas. La STFT utiliza una "ventana de tiempo".
+    # Librosa utiliza una STFT para realizar los espectrogramas. La STFT utiliza una ventana de tiempo/frame.
     # 
     # Las ventanas de tiempo son muy importantes e influyen en el resultado del espectrograma, debido a que uno de los problemas que tiene STFT es que, dependiendo del tamaño de la ventana,
-    # puede perder resolución de frecuencia, o resolución de tiempo.
+    # el espectrograma puede perder resolución de frecuencia, o resolución de tiempo.
     #
     # La "resolución de frecuencia" es lo que nos permite identificar con claridad el valor de la frecuencia en el espectrograma. Si perdemos resolución de frecuencia en un espectrograma,
     # nos va a costar distinguir el valor de la frecuencia.
     #
     # La "resolución de tiempo" nos indica el tiempo en que las frecuencias cambian. Si perdemos resolución de tiempo, en el espectrograma no vamos a notar claramente cuándo
-    # cambian las    frecuencias.
+    # cambian las frecuencias.
     # 
-    # La regla es la siguiente: si disminuimos el tamaño de la ventana, aumenta la resolución de tiempo. Si aumentamos el tamaño de la ventana, aumenta la resolución
-    # de la frecuencia.
+    # Si disminuimos el tamaño de la ventana, aumenta la resolución de tiempo. Si aumentamos el tamaño de la ventana, aumenta la resolución de la frecuencia.
     #
     # Parámetros:
-    # n_ftt se usa para establecer el tamaño de la ventana en la STFT
-    # para análisis de voz, se recomienda utilizar un frame entre 23 y 40ms de duración
-    # win_length largo de la ventana de la funcion window, si no se indica este parámetro por defecto es igual a n_ftt
+    # n_ftt se usa para establecer el tamaño de la ventana (frame) en la STFT
+    # para análisis de voz, se recomienda utilizar un tamaño de frame entre 23 y 40ms de duración
+    # win_length largo de la ventana de la funcion window que es aplicada, si no se indica este parámetro por defecto es igual a n_ftt
 
     # sr=None preserva el sampling rate original del archivo, de otra forma librosa realiza un resampling a 22050
     y, sr = librosa.load(path + audio_file, offset=off, duration=dur, sr=None)
@@ -216,14 +223,34 @@ def calculateSlice(path, audio_file):
     if (slicingType == 'lastSecond'):
         return totalDur-1, 1
 
+def applySlicing(audio_path, audio, cmap, save_path, method):
+    if (slicingType == None):
+        offset, dur = 0.0, None
+        method(audio_path, audio, save_path, offset, dur, cmap=cmap)
+        return
+
+    totalDur = librosa.get_duration(filename=audio_path+audio)
+    if (slicingType == 'lastSecond'):
+        offset, dur = totalDur-1, 1
+        method(audio_path, audio, save_path, offset, dur, cmap=cmap)
+        return
+
+    if (slicingType == 'middle'):
+        method(audio_path, audio, save_path, 0, int(totalDur/2), cmap=cmap)
+        method(audio_path, audio, save_path, int(totalDur/2), None, cmap=cmap)
+        return
+
 def removeAxis():
     # Removemos los bordes y ejes del espectrograma y ajustamos su tamaño (figsize)
     #fig = plt.subplots() #plt.subplots(1, figsize=(6,4))
     plt.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace = 0, wspace = 0)
 
 def saveSpec(save_path, audio_file): 
+    n = ""
+    if (slicingType == "middle"):
+        n = random.randint(0,22)
     # Guardamos la imagen en el directorio
-    plt.savefig(save_path + '/' + audio_file[:-4] + '.png')
+    plt.savefig(save_path + '/' + audio_file[:-4] + str(n) + '.png')
     plt.close()
 
 main()
